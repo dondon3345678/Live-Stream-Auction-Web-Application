@@ -20,8 +20,8 @@ if ($_GET['res'] == 'failed') display_failed();
 # 1: Login successful
 if ($_GET['res'] == 'success') display_success();
 # 0: Register
-if ($_GET['res'] == 'register') display_register();
-if ($_GET['register'] == 'register') register(); display_success();
+if ($_GET['reg'] || $_POST['reg']) display_register();
+if ($_GET['register'] || $_POST['register']) {register(); display_success();}
 # 3: Logged out (TODO: Display a timeout message, and options)
 if ($_GET['res'] == 'logoff') display_logoff();
 if ($_GET['res'] == 'timeout') display_logoff(); // timeout 'res' is not native
@@ -81,11 +81,9 @@ function display_notyet() {
                     '<th>Password</th>',
                     '<td><input type="password" name="password"></td>',
                 '</tr>',
-                '<tr>',
-                    '<td><a href="http://' . $_GET['uamip'] . ':' . $_GET['uamport'] . '/register">Register Now</a></td>',
-                '</tr>',
             '</table>',
             '<input type="submit" value="Login">',
+            '<input type="submit" name="reg" value="Or Register!"/>',
         '</form>'
     ));
 }
