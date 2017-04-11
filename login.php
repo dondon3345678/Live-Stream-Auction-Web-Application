@@ -64,7 +64,13 @@
                   <label>Password  :</label><input type = "password" name = "password" class = "box" /><br/><br />
                   <input type = "submit" value = " Submit "/><br />
                </form>
-               
+               <form action = "register.php" method = "post">
+		       Or Register here:
+                  <label>UserName  :</label><input type = "text" name = "r_username" class = "box"/><br /><br />
+                  <label>Password  :</label><input type = "password" name = "r_password" class = "box" /><br/><br />
+                  <input type = "submit" value = " Submit "/><br />
+               </form>
+		    
                <div style = "font-size:11px; color:#cc0000; margin-top:10px"><?php echo $error; ?></div>
 					
             </div>
