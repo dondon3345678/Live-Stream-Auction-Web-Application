@@ -5,8 +5,8 @@
    if($_SERVER["REQUEST_METHOD"] == "POST") {
       // username and password sent from form 
       
-      $myusername = mysqli_real_escape_string($db,$_POST['username']);
-      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      $myusername = mysqli_real_escape_string($db,$_POST['r_username']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['r_password']); 
       
       ## to do: change this ##
       $sql = "INSERT INTO table VALUE($myusername,$mypassword)";
