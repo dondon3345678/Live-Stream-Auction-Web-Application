@@ -21,7 +21,7 @@ if ($_GET['res'] == 'failed') display_failed();
 if ($_GET['res'] == 'success') display_success();
 # 0: Register
 if ($_GET['reg'] || $_POST['reg']) display_register();
-if ($_GET['register'] || $_POST['register']) {register(); display_();}
+if ($_GET['register'] || $_POST['register']) {register(); display_notyet();}
 # 3: Logged out (TODO: Display a timeout message, and options)
 if ($_GET['res'] == 'logoff') display_logoff();
 if ($_GET['res'] == 'timeout') display_logoff(); // timeout 'res' is not native
