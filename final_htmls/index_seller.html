@@ -8,44 +8,47 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 </head>
 
 <style>
-	.title {
-		font-size: 20pt;
-	}
-	.price {
-		font-size: 14pt;
-	}
+.price {
+	font-size: 14pt;
+}
 </style>
 
 <body>
 
-<div class="row" style="height: 30px;"></div>
-<div class="title row" align="center" style="height: 80px;">歡迎登入拍賣網（賣家端）</div>
-<div class="row" align="center">
-	<div class="col-md-5">
-		<iframe allowfullscreen="" frameborder="0" height="270" src="https://www.youtube.com/embed/orOd_CV7VtQ" width="480"></iframe><br />	
-		<div class="row" style="height: 30px;"></div>
-		<div class="row" style="height: 100px;">
-			<div class="price col-md-offset-2 col-md-10" align="left">
-				<div class="row" style="height: 50px;">最高出價____（出價者帳號）</div>
-				<div class="row" style="height: 50px;">調整間距
-					<input type="text" name="priceGap" width="20">元
-				</div>
-				<div class="row" style="height: 50px;">
-					開始拍賣&nbsp;&nbsp;&nbsp;
-					
-					<input type="checkbox" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger">
-				
+	<div class="row" style="height: 30px;"></div>
+	<div class="title row" align="center" style="height: 80px;"><h1>SELLER</h1></div>
+	<div class="row" align="center">
+		<div class="col-md-5">
+			<iframe allowfullscreen="" frameborder="0" height="270" src="https://www.youtube.com/embed/orOd_CV7VtQ" width="480"></iframe><br />
+			<div class="row" style="height: 30px;"></div>
+			<div class="row" style="height: 100px;">
+				<div class="price col-md-offset-2 col-md-10" align="left">
+					<div class="row" style="height: 50px;">最高出價____（出價者帳號）</div>
+					<div class="row" style="height: 50px;">
+						調整間距&nbsp;&nbsp;&nbsp;
+						<input type="number" name="priceGap">&nbsp;元
+					</div>
+					<div class="row" style="height: 50px;">
+						開始拍賣&nbsp;&nbsp;&nbsp;
+						<input type="checkbox" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger">
+					</div>
 				</div>
 			</div>
 		</div>
+		<div class="col-md-2">客戶list</div>
+		<div class="col-md-4">
+			<iframe allowfullscreen="" frameborder="0" height="600" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw" width="480"></iframe><br />
+		</div>
 	</div>
-	<div class="col-md-2">客戶list</div>
-	<div class="col-md-4">
-		<iframe allowfullscreen="" frameborder="0" height="600" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw" width="480"></iframe><br />
-	</div>
-</div>
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/skel.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
 </body>
 </html>
