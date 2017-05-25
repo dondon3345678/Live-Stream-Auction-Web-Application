@@ -17,18 +17,20 @@
 .price {
 	font-size: 14pt;
 }
+body {
+	padding: 5%;
+}
 </style>
 
 <body>
-	<div class="row" style="height: 30px;"></div>
 	<div class="title row" align="center" style="height: 80px;"><h1>SELLER</h1></div>
 	<div class="row" align="center">
-		<div class="col-md-6">
-			<iframe allowfullscreen="" frameborder="0" height="340" width="600"
+		<div class="col-md-4 col-xs-12">
+			<iframe id="video" allowfullscreen="" frameborder="0" width="100%"
 			src="https://www.youtube.com/embed/orOd_CV7VtQ"></iframe><br />
 			<div class="row" style="height: 30px;"></div>
 			<div class="row" style="height: 100px;">
-				<div class="price col-md-offset-2 col-md-10" align="left">
+				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
 					<div class="row" style="height: 50px;">最高出價____（出價者帳號）</div>
 					<div class="row" style="height: 50px;">
 						調整間距&nbsp;&nbsp;&nbsp;
@@ -41,9 +43,9 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-2"><h2>客戶 List</h2></div>
-		<div class="col-md-4">
-			<iframe allowfullscreen="" frameborder="0" height="600" width="400" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
+		<div class="col-md-4 col-xs-12"><h2>客戶 List</h2></div>
+		<div class="col-md-4 col-xs-12">
+			<iframe allowfullscreen="" frameborder="0" height="600" width="100%" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
 		</div>
 	</div>
 	<script src="assets/js/jquery.min.js"></script>
@@ -51,4 +53,13 @@
 	<script src="assets/js/util.js"></script>
 	<script src="assets/js/main.js"></script>
 </body>
+
+<script type="text/javascript">
+$(function() {
+	var iframe = $('#video');
+	var width = iframe.width() * 45 / 80;
+	iframe.css('height', width);
+});
+</script>
+
 </html>
