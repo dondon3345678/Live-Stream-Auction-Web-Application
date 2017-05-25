@@ -43,9 +43,9 @@ body {
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-xs-12"><h2>客戶 List</h2></div>
+		<div class="col-md-4 col-xs-12"><h2>Bidder List</h2></div>
 		<div class="col-md-4 col-xs-12">
-			<iframe allowfullscreen="" frameborder="0" height="600" width="100%" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
+			<iframe id="chat" allowfullscreen="" frameborder="0" height="600" width="100%" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
 		</div>
 	</div>
 	<script src="assets/js/jquery.min.js"></script>
@@ -56,9 +56,12 @@ body {
 
 <script type="text/javascript">
 $(function() {
-	var iframe = $('#video');
-	var width = iframe.width() * 45 / 80;
-	iframe.css('height', width);
+	var video = $('#video');
+	var height = video.width() * 45 / 80;
+	video.css('height', height);
+	var chat = $('#chat');
+	var height = chat.width() * 1.5;
+	chat.css('height', height);
 });
 </script>
 
