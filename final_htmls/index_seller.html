@@ -9,8 +9,8 @@
 	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<!-- <link rel="stylesheet" href="assets/css/main.css" /> -->
+	<!-- <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript> -->
 </head>
 
 <style>
@@ -19,33 +19,54 @@
 }
 body {
 	padding: 5%;
+	background-color:#222222;
+	color:white;
+}
+input {
+	color: black;
 }
 </style>
 
-<body>
+<script>
+window.onload = (event) => {
+	document.querySelector("#submit").onclick = (event) => {
+		event.preventDefault();
+		let streamID = document.querySelector("#streamID").value;
+		document.querySelector("#video").src = "https://www.youtube.com/embed/" + streamID;
+		document.querySelector("#chat").src = "https://www.youtube.com/live_chat?v=" + streamID + "&embed_domain=www.csie.ntu.edu.tw";
+	}
+}
+</script>
+<body style="">
 	<div class="title row" align="center" style="height: 80px;"><h1>SELLER</h1></div>
 	<div class="row" align="center">
 		<div class="col-md-4 col-xs-12">
 			<iframe id="video" allowfullscreen="" frameborder="0" width="100%"
-			src="https://www.youtube.com/embed/orOd_CV7VtQ"></iframe><br />
+			src=""></iframe><br />
+			<!-- orOd_CV7VtQ -->
 			<div class="row" style="height: 30px;"></div>
 			<div class="row" style="height: 100px;">
 				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
-					<div class="row" style="height: 50px;">最高出價____（出價者帳號）</div>
+						<div class="row" style="height: 50px;">Youtube stream ID</div>
+						<div class="row" style="height: 50px;">
+							<input type="text" id="streamID" name="streamURL" style="color:black;">
+							<input type="button" id="submit" value="ENTER" style="color:black;">
+						</div>
+					<div class="row" style="height: 50px;">最高出價&nbsp;&nbsp;&nbsp;____（出價者帳號）</div>
 					<div class="row" style="height: 50px;">
 						調整間距&nbsp;&nbsp;&nbsp;
-						<input type="number" name="priceGap">&nbsp;元
+						<input type="number" name="priceGap" style="width: 100px;">&nbsp;元
 					</div>
 					<div class="row" style="height: 50px;">
 						開始拍賣&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger">
+						<input type="checkbox" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger"  style="width: 100px;">
 					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4 col-xs-12"><h2>Bidder List</h2></div>
 		<div class="col-md-4 col-xs-12">
-			<iframe id="chat" allowfullscreen="" frameborder="0" height="600" width="100%" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
+			<iframe id="chat" allowfullscreen="" frameborder="0" height="600" width="100%" src=""></iframe><br />
 		</div>
 	</div>
 	<script src="assets/js/jquery.min.js"></script>
