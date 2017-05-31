@@ -7,8 +7,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-	<link rel="stylesheet" href="assets/css/main.css" />
-	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	<!-- <link rel="stylesheet" href="assets/css/main.css" />
+	<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript> -->
 </head>
 
 <style>
@@ -17,12 +17,17 @@
 }
 body {
 	padding: 5%;
+	background-color:#222222;
+	color:white;
+}
+input, button {
+	color: black;
 }
 </style>
 
 <body>
 	<div class="title row" align="center" style="height: 80px;">
-		<h1>Bidder</h1>
+		<h1>BIDDER</h1>
 	</div>
 	<div class="row" align="center">
 		<div class="col-md-8 col-xs-12">
@@ -30,8 +35,12 @@ body {
 			src="https://www.youtube.com/embed/orOd_CV7VtQ"></iframe><br />
 			<div class="row" style="height: 30px;"></div>
 			<div class="row" style="height: 100px;">
-				<div class="price col-md-offset-2 col-xs-offset-2 col-md-4 col-xs-10" align="left" style="height: 50px;">最高出價____（出價者帳號）</div>
-				<div class="price col-md-2 col-xs-12" align="center"><button>加五塊</button></div>
+				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
+					<div class="row" style="height: 50px;">
+						最高出價&nbsp;&nbsp;&nbsp;<span id="money"></span> by <span id="bidder"></span>
+					</div>
+					<div class="row" style="height: 50px;">我要加價&nbsp;&nbsp;&nbsp;<button><span id="interval"></span> NTD</button></div>
+				</div>
 			</div>
 		</div>
 		<div class="col-md-4 col-xs-12">
