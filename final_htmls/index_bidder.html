@@ -5,6 +5,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<!-- <link rel="stylesheet" href="assets/css/main.css" />
@@ -24,7 +25,14 @@ input, button {
 	color: black;
 }
 </style>
+<script>
+var socket = io();
+socket.on('update youtube',function(streamID){
+    document.querySelector("#video").src = "https://www.youtube.com/embed/" + streamID;
+    //alert($("iframe#video src").text());
+});
 
+</script>
 <body>
 	<div class="title row" align="center" style="height: 80px;">
 		<h1>BIDDER</h1>
@@ -32,7 +40,7 @@ input, button {
 	<div class="row" align="center">
 		<div class="col-md-8 col-xs-12">
 			<iframe id="video" allowfullscreen="" frameborder="0" width="100%"
-			src="https://www.youtube.com/embed/orOd_CV7VtQ"></iframe><br />
+			src=""></iframe><br />
 			<div class="row" style="height: 30px;"></div>
 			<div class="row" style="height: 100px;">
 				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
@@ -43,9 +51,11 @@ input, button {
 				</div>
 			</div>
 		</div>
+        <!--
 		<div class="col-md-4 col-xs-12">
 			<iframe id="chat" allowfullscreen="" frameborder="0" height="600" width="100%" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
 		</div>
+        -->
 	</div>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/skel.min.js"></script>
