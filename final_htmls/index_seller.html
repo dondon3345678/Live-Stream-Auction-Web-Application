@@ -26,25 +26,117 @@ body {
 input {
 	color: black;
 }
+
+	#m{ 
+        border: 2px solid black; 
+        padding: 10px; 
+        width: 85%; 
+        /*margin: .5%; */
+        /*position: fixed; */
+        /*bottom: 0;*/
+        /*right:120px;*/
+
+      }
+      #send{ 
+        width: 15%; 
+        /*margin: .5%; */
+        /*background: rgb(121,2,2);*/
+        color:black; 
+        padding: 10px; 
+        /*position: fixed; */
+        /*bottom: 0;*/
+        /*right:5px;*/
+      }
+      #message_block{
+        width:100%;
+        /*position: absolute;*/
+        /*top:0;*/
+        /*bottom:5%;*/
+        /*margin-bottom:10px;*/
+        border: solid 2px black; 
+        overflow:auto;
+      }
+      #messages { 
+        list-style-type: none; 
+        margin: 10px; 
+        padding: 0; 
+        background-color: transparent;
+      }
+      #messages li { 
+      	text-align: left;
+        padding: 5px 10px; 
+        font-size:12pt;
+        color: white;
+      }
+      /*#messages li:nth-child(odd) { */
+        /*background: #eee; */
+      /*}*/
+
+
 </style>
 <script>
-var socket = io()
-window.onload = (event) => {
-	document.querySelector("#submit").onclick = (event) => {
-		event.preventDefault();
-		let streamID = document.querySelector("#streamID").value;
-		document.querySelector("#video").src = "https://www.youtube.com/embed/" + streamID;
-        socket.emit('update youtube',streamID);
+	var socket = io();
+	var username = prompt("請輸入暱稱","guest");		// need to change
+	var status = true;
+	socket.emit('add user', username);
+	socket.on('add user',function(data){
+		appendMessage(data.username+"已加入");
+	});
+
+	window.onload = (event) => {
+		document.querySelector("#submit").onclick = (event) => {
+			event.preventDefault();
+			let streamID = document.querySelector("#streamID").value;
+			document.querySelector("#video").src = "https://www.youtube.com/embed/" + streamID;
+	        let itemName = document.querySelector("#itemName").value;
+	        // let priceGap = document.querySelector("#priceGap").value;
+	        var startAuction = document.getElementById("startAuction");
+	        if (startAuction.checked) {
+	        	status = true;
+	        } else {
+	        	status = false;
+	        }
+	        
+	        socket.emit('update info', {
+	        		itemName: itemName,
+	        		streamID: streamID,
+	        		// priceGap: priceGap,
+	        		startAuction: status
+	        });
+		}
+		socket.on('add user', function(data){
+			appendMessage(data.username+"已加入");
+			// reload userlist
+		});
+		socket.on('chat message', function(data){
+			appendMessage(data.username+": "+data.msg);
+		});
+		socket.on('new bid', function(data){
+			document.querySelector("#money").innerHTML = data.price;
+			document.querySelector("#bidder").innerHTML = data.username;
+		});
+
+
+		$(function() {
+			var video = $('#video');
+			var height = video.width() * 45 / 80;
+			video.css('height', height);
+			var chat = $('#message_block');
+			var height = chat.width() * 1.5;
+			chat.css('height', height);
+		});
 	}
-$(function() {
-	var video = $('#video');
-	var height = video.width() * 45 / 80;
-	video.css('height', height);
-	var chat = $('#chat');
-	var height = chat.width() * 1.5;
-	chat.css('height', height);
-});
-}
+	function sendMsg(){
+		var text = $('#m').val();
+		socket.emit('chat message', text);
+		$('#m').val('');
+		return false;
+	}
+	function appendMessage(msg){
+		$('#messages').append($('<li>').text(msg));
+		var message = document.getElementById("message_block");
+		message.scrollTop = message.scrollHeight;
+	}
 </script>
 <body style="">
 	<div class="title row" align="center" style="height: 80px;"><h1>SELLER</h1></div>
@@ -56,26 +148,38 @@ $(function() {
 			<div class="row" style="height: 30px;"></div>
 			<div class="row" style="height: 100px;">
 				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
-						<div class="row" style="height: 50px;">Youtube stream ID</div>
-						<div class="row" style="height: 50px;">
-							<input type="text" id="streamID" name="streamURL" style="width: 150px;">
-							<input type="button" id="submit" value="ENTER">
-						</div>
-					<div class="row" style="height: 50px;">最高出價&nbsp;&nbsp;&nbsp;____（出價者帳號）</div>
 					<div class="row" style="height: 50px;">
-						調整間距&nbsp;&nbsp;&nbsp;
-						<input type="number" name="priceGap" style="width: 100px;">&nbsp;元
+						商品名稱&nbsp;&nbsp;&nbsp;
+						<input type="text" id="itemName" name="itemName" style="width: 100px;">
 					</div>
+					<div class="row" style="height: 50px;">
+						直播 ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="text" id="streamID" name="streamURL" style="width: 150px;">
+						&nbsp;
+					</div>
+					<div class="row" style="height: 50px;">最高出價&nbsp;&nbsp;&nbsp;
+						<span id="money">0</span>元 by <span id="bidder"></span>
+					</div>
+<!-- 					<div class="row" style="height: 50px;">
+						調整間距&nbsp;&nbsp;&nbsp;
+						<input type="number" id="priceGap" style="width: 100px;">&nbsp;元
+					</div> -->
 					<div class="row" style="height: 50px;">
 						開始拍賣&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger"  style="width: 100px;">
+						<input type="checkbox" id="startAuction" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger"  style="width: 100px;">
 					</div>
+					<input type="button" id="submit" value="ENTER">
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4 col-xs-12"><h2>Bidder List</h2></div>
 		<div class="col-md-4 col-xs-12">
-			<iframe id="chat" allowfullscreen="" frameborder="0" height="600" width="100%" src=""></iframe><br />
+			<div id="message_block" style="border: 1px white solid">
+    			<ul id="messages"></ul>
+    		</div>
+    		<div class="row">
+    		<input id="m" autocomplete="off" /><button id="send" onclick="sendMsg();">Send</button>
+    		</div>
 		</div>
 	</div>
 	<script src="assets/js/jquery.min.js"></script>

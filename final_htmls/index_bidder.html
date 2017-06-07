@@ -24,18 +24,111 @@ body {
 input, button {
 	color: black;
 }
+
+	#m{ 
+        border: 2px solid black; 
+        padding: 10px; 
+        width: 85%; 
+        /*margin: .5%; */
+        /*position: fixed; */
+        /*bottom: 0;*/
+        /*right:120px;*/
+
+      }
+      #send{ 
+        width: 15%; 
+        /*margin: .5%; */
+        /*background: rgb(121,2,2);*/
+        color:black; 
+        padding: 10px; 
+        /*position: fixed; */
+        /*bottom: 0;*/
+        /*right:5px;*/
+      }
+      #message_block{
+        width:100%;
+        /*position: absolute;*/
+        /*top:0;*/
+        /*bottom:5%;*/
+        /*margin-bottom:10px;*/
+        border: solid 2px black; 
+        overflow:auto;
+      }
+      #messages { 
+        list-style-type: none; 
+        margin: 10px; 
+        padding: 0; 
+        background-color: transparent;
+      }
+      #messages li { 
+      	text-align: left;
+        padding: 5px 10px; 
+        font-size:12pt;
+        color: white;
+      }
+      /*#messages li:nth-child(odd) { */
+        /*background: #eee; */
+      /*}*/
+
 </style>
 <script>
-var socket = io();
-socket.on('update youtube',function(streamID){
-    document.querySelector("#video").src = "https://www.youtube.com/embed/" + streamID;
-    //alert($("iframe#video src").text());
-});
+	var socket = io();
+	var username = prompt("請輸入暱稱","guest");		// need to change
+	var currentPrice = 0;
+
+	socket.emit('add user', username);
+	socket.on('add user',function(data){
+		appendMessage(data.username+"已加入");
+	});
+
+	socket.on('update info',function(data){
+	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID;
+		document.querySelector("#itemName").innerHTML = data.itemName;
+		// document.querySelector("#itemDep").innerHTML = data.itemDep;
+
+		
+
+
+
+		/* TODO */
+		if (data.startAuction=="false") {
+			document.querySelector("#status").innerHTML = "停止拍賣";
+			document.getElementById("status").style.color = "red";
+			document.querySelector("#bid").disabled = true;
+		} else {
+			document.querySelector("#status").innerHTML = "拍賣中";
+			// document.querySelector("#status").style.color = red;
+			document.getElementById("status").style.color = "green";
+		}
+	});
+	socket.on('chat message', function(data){
+		appendMessage(data.username+": "+data.msg);
+	});
+	socket.on('new bid', function(data){
+		document.querySelector("#money").innerHTML = data.price;
+		document.querySelector("#bidder").innerHTML = data.username;
+	});
+	function sendMsg(){
+		var text = $('#m').val();
+		socket.emit('chat message', text);
+		$('#m').val('');
+		return false;
+	}
+	function newBid(){
+		let price = document.querySelector("#price").value;
+		socket.emit('new bid', price);
+	}
+	function appendMessage(msg){
+		$('#messages').append($('<li>').text(msg));
+		var message = document.getElementById("message_block");
+		message.scrollTop = message.scrollHeight;
+	}
 
 </script>
 <body>
-	<div class="title row" align="center" style="height: 80px;">
+	<div class="title row" align="center" style="height: 160px;">
 		<h1>BIDDER</h1>
+		<h2 id="itemName">當前商品</h2>
 	</div>
 	<div class="row" align="center">
 		<div class="col-md-8 col-xs-12">
@@ -45,17 +138,29 @@ socket.on('update youtube',function(streamID){
 			<div class="row" style="height: 100px;">
 				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
 					<div class="row" style="height: 50px;">
-						最高出價&nbsp;&nbsp;&nbsp;<span id="money"></span> by <span id="bidder"></span>
+						最高出價&nbsp;&nbsp;&nbsp;
+						<span id="money">0</span>元 by <span id="bidder"></span>
 					</div>
-					<div class="row" style="height: 50px;">我要加價&nbsp;&nbsp;&nbsp;<button><span id="interval"></span> NTD</button></div>
+					<div class="row" style="height: 50px;">
+						我要加價&nbsp;&nbsp;&nbsp;
+						<!-- <button id="bid" onclick="newBid();"><span id="interval"></span> NTD</button> -->
+						<input type="number" id="price" style="width: 100px">
+						<button onclick="newBid();">go</button>
+						<span id="status"></span>
+					</div>
 				</div>
 			</div>
 		</div>
-        <!--
+        
 		<div class="col-md-4 col-xs-12">
-			<iframe id="chat" allowfullscreen="" frameborder="0" height="600" width="100%" src="https://www.youtube.com/live_chat?v=orOd_CV7VtQ&embed_domain=www.csie.ntu.edu.tw"></iframe><br />
+			<div id="message_block" style="border: 1px white solid">
+    			<ul id="messages"></ul>
+    		</div>
+    		<div class="row">
+    		<input id="m" autocomplete="off" /><button id="send" onclick="sendMsg();">Send</button>
+    		</div>
 		</div>
-        -->
+        
 	</div>
 	<script src="assets/js/jquery.min.js"></script>
 	<script src="assets/js/skel.min.js"></script>
@@ -68,7 +173,7 @@ $(function() {
 	var video = $('#video');
 	var height = video.width() * 45 / 80;
 	video.css('height', height);
-	var chat = $('#chat');
+	var chat = $('#message_block');
 	var height = chat.width() * 1.5;
 	chat.css('height', height);
 });
