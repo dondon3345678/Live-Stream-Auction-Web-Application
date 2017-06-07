@@ -7,10 +7,18 @@
 3. ANYTHING about SQL
 4. youtube video should auto-play
 5. seller 更新之後 bidder 才進來，該怎麼更新？
-6. 所有的排版加油 O_<
+6. 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
+7. end auction後server該做什麼？
+8. 所有的排版加油 O_<
 ```
 ## Execution
 ```javascript
 npm install
 node server.js
 ```
+## Finished Works
+```
+1. Youtube stream video
+2. setting/bidding interface
+3. chat room
+3. start and end auction (end時最高金額reset為0，server的處理還沒有加上)
