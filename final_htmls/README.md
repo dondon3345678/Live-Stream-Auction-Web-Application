@@ -12,7 +12,7 @@
 8. 所有的排版加油 O_<
 
 9. client send bid(get current price, +10, send to server), need to define the interface
-10. server receive bid
+10. server receive bid and update
 
 ```
 ## Execution
