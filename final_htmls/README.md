@@ -10,6 +10,10 @@
 6. 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
 7. end auction後server該做什麼？
 8. 所有的排版加油 O_<
+
+9. client send bid(get current price, +10, send to server), need to define the interface
+10. server receive bid
+
 ```
 ## Execution
 ```javascript
@@ -22,3 +26,6 @@ node server.js
 2. setting/bidding interface
 3. chat room
 3. start and end auction (end時最高金額reset為0，server的處理還沒有加上)
+```
+## requirement
+npm install ursa
