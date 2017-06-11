@@ -1,18 +1,57 @@
 var app = require('express')();
 var http= require('http').Server(app);
 var io = require('socket.io')(http);
+var db = require('./db');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+
+var test = 'test'
+app.use(session({secret: 'test'}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+var sess;
 
 app.get('/', function(req, res){
-      res.sendFile(__dirname + '/index.html');
+      sess = req.session;
+      if(sess.user){
+          res.redirect('/index_seller.html');
+      }else{
+          res.redirect( '/login.html');
+      }
+});
+app.post('/login.html', function(req,res){
+      console.log(req.body.username);
+      console.log(req.body.password);
+      sess = req.session;
+      db.query('select * from users where name = ? and password = ?',[req.body.username,req.body.password],function(err,rows){
+        if(err){
+            console.log(err);
+        }else if(rows.length==0){
+            console.log("wrong");
+        }else{
+            console.log(req.body.username+" log in");
+            sess.user = req.body.username;
+            if(rows[0].type == 'regular'){
+                res.redirect('/index_bidder.html');
+            }else{
+                //'seller'
+                res.redirect('/index_seller.html');
+            }
+        }
+      })
+});
+
+
+app.get('/login.html', function(req,res){
+    res.sendFile(__dirname+'/login.html');
 });
 app.get('/index_seller.html', function(req, res){
       res.sendFile(__dirname + '/index_seller.html');
 });
-
 app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
 });
-
 var currentPrice = 0;
 
 io.on('connection', function(socket){
