@@ -4,6 +4,8 @@ var io = require('socket.io')(http);
 var db = require('./db');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var digtial_sig = require('./digital_sig');
+var crypto = require('crypto');
 
 var test = 'test'
 app.use(session({secret: 'test'}));
@@ -52,6 +54,11 @@ app.get('/index_seller.html', function(req, res){
 app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
 });
+
+app.get('/register.html', function(req, res){
+	res.sendFile(__dirname + '/register.html');
+});
+
 var currentPrice = 0;
 var startAuction = 0;
 var currentPlayer = '';
@@ -108,6 +115,57 @@ io.on('connection', function(socket){
 			price: currentPrice,
 		});
 	});
+	socket.on('register', function(req){
+	    var hash = crypto.createHash('sha256');
+	    var username = req.body.username;
+	    var password = req.body.passowrd;
+	    var confirm_password = req.body.password;
+	    var eamil = req.body.email;
+		var time = req.body.submitTime;
+
+		var result = {};
+	    if(password != confirm_password){
+	    	console.log("Password doesn't match");
+	    	result['message'] = "password doesn't match"
+			result['status_code'] = 400;
+			socket.broadcast.to(socket.id).emit(result);
+			return;
+	    }
+	    hash.update(password);
+	    var hashedPassword = hash.digest('base64');
+
+	    db.query("select 1 from user where name = ? order by name limit 1", [username], function(error, results, fields){
+	    	if(error){
+	    		console.log(error);
+				result['message'] = "Internal Server Error";
+				result['status_code'] = 500;
+				socket.broadcast.to(socket.id).emit(result);
+				return;
+	    	}
+	    	if(results.length > 0){
+	    		console.log("useranem", username, "already exits");
+				result['message'] = "username already exists";
+				result['status_code'] = 400;
+				socket.broadcast.to(socket.id).emit(result);
+				return;
+	    	};
+	    });
+	    // write to DB
+		db.query("insert into user (name, password, email, timesatmp) values ?", [username, hashedPassword, email, timestamp], function(error, result){
+			if(error){
+				console.log(error);
+				result['message'] = "Internal Server Error";
+				result['status_code'] = 500;
+				socket.broadcast.to(socket.id).emit(result);
+				return;
+			}
+		});
+		// success
+		result['message'] = "success";
+		result['username'] = username;
+		result['status_code'] = 200;
+		socket.broadcast.to(socket.id).emit(result);
+		return;
 });
 
 http.listen(3000,function(){
