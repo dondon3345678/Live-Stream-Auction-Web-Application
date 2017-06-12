@@ -121,6 +121,13 @@ input, button {
 		var message = document.getElementById("message_block");
 		message.scrollTop = message.scrollHeight;
 	}
+	function ValidateNumber(e, pnumber)
+	{
+    	if (!/^\d+$/.test(pnumber)) {
+        	$(e).val(/^\d+/.exec($(e).val()));
+    	}
+    	return false;
+	}
 
 </script>
 <body>
@@ -142,7 +149,7 @@ input, button {
 					<div class="row" style="height: 50px;">
 						我要加價&nbsp;&nbsp;&nbsp;
 						<!-- <button id="bid" onclick="newBid();"><span id="interval"></span> NTD</button> -->
-						<input type="number" id="price" style="width: 100px">
+						<input type="number" id="price" style="width: 100px" onkeyup="return ValidateNumber($(this),value)">元
 						<button onclick="newBid();">go</button>
 						<span id="status"></span>
 					</div>
