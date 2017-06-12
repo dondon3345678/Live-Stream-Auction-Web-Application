@@ -1,47 +1,45 @@
 # This is Final Project of CNL team 10 , 2017.
 
 ## TODO
-```
-1. login, logout
-2. userlist and BAN
-3. ANYTHING about SQL
-4. 當seller'開始拍賣'的關起來的時候，所有的bid都return fail
-5. 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
-6. end auction後server該做什麼？傳給seller下標者的資訊嗎？
-7. 排版
-8. client send bid(get current price, +10, send to server), need to define the interface
-9. server receive bid and update
 
-```
+- [ ] login, logout
+- [ ] userlist and BAN
+- [ ] ANYTHING about SQL
+- [ ] 當seller'開始拍賣'的關起來的時候，所有的bid都return fail
+- [ ] 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
+- [ ] end auction後server該做什麼？傳給seller下標者的資訊嗎？
+- [ ] 排版
+- [ ] client send bid(get current price, +10, send to server), need to define the interface
+- [ ] server receive bid and update
+
 ## Execution
+
 ```javascript
 npm install
 node server.js
 ```
 ## Finished Works
-```
-1. Youtube stream video
-2. setting/bidding interface
-3. chat room
-3. start and end auction (end時最高金額reset為0，server的處理還沒有加上)
-4. 每次出價都會跳出確認視窗，顯示出價價格，送出後會有幾種response 
--->改成每次一有新的拍賣開始就創建一個prodcut的object，並push到productList裡面，之後就更新資料
-  a.價錢小於目前最高價 FAIL
-  b.此商品已經結標 FAIL
-  c.自己已經是目前的最高價出標者 FAIL
-  d.SUCCESS
-  e.比別人晚出價 FAIL
-5. youtube video auto-play
-6. seller 更新之後 bidder 才進來，該怎麼更新？
+
+- [x] Youtube stream video
+- [x] setting/bidding interface
+- [x] chat room
+- [x] start and end auction (end時最高金額reset為0，server的處理還沒有加上)
+- [x] 每次出價都會跳出確認視窗，顯示出價價格，送出後會有幾種response --> 改成每次一有新的拍賣開始就創建一個prodcut的object，並push到productList裡面，之後就更新資料
+
+  - 價錢小於目前最高價 FAIL
+  - 此商品已經結標 FAIL
+  - 自己已經是目前的最高價出標者 FAIL
+  - SUCCESS
+  - 比別人晚出價 FAIL
+  
+- [x] youtube video auto-play
+- [x] seller 更新之後 bidder 才進來，該怎麼更新？
 --> 傳給他現有的資料更新
 
-
-```
 ## requirement
 ```
 npm install ursa
 ```
 ## Need test
-```
-register
-```
+
+- [x] register
