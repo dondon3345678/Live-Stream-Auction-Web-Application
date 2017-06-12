@@ -8,8 +8,8 @@ const hashMethod = "sha256";
 
 module.exports = {
 	genKeyPair: genKeyPair,
-	getUserPrivKey: getUserPrivKey,
-	getUserPubKey: getUserPubKey,
+	getUserPrivKeyPem: getUserPrivKeyPem,
+	getUserPubKeyPem: getUserPubKeyPem,
 	createDigitalSignature: createDigitalSignature,
 	verifyDigitalSignature: verifyDigitalSignature,
 };
@@ -19,28 +19,29 @@ module.exports = {
 function genKeyPair() {
     var keys = ursa.generatePrivateKey(2048);
     
-    _privPem = ursa.createPrivateKey(keys.toPrivatePem());
-    _privKey = _privPem.toPrivatePem('utf8');
+    _privKey = ursa.createPrivateKey(keys.toPrivatePem());
+    _privPem = _privKey.toPrivatePem('utf8');
     
-    _pubPem = ursa.createPublicKey(keys.toPublicPem());
-    _pubKey = _pubPem.toPublicPem('utf8');
-	return;
+    _pubKey = ursa.createPublicKey(keys.toPublicPem());
+    _pubPem = _pubKey.toPublicPem('utf8');
+	return [_pubPem, _privPem];
 };
 
 
-function getUserPrivKey(){
+function getUserPrivKeyPem(){
 	return _privPem;
 };
 
 
-function getUserPubKey(){
+function getUserPubKeyPem(){
 	// why would user need to get pub key?
 	return _pubPem;
 };
 
 
 function createDigitalSignature(msg){
-	var privKey = getUserPrivKey();
+	var privKeyPem = getUserPrivKeyPem();
+	var privKey = ursa.createPrivateKey(privKeyPem);
 	var digitalSignature = privKey.hashAndSign(hashMethod, msg, 'utf8', 'base64', false);
 	console.log("Before signed:", msg);
 	console.log("After signed:", digitalSignature);
@@ -50,11 +51,12 @@ function createDigitalSignature(msg){
 
 
 // for server side
-function verifyDigitalSignature(plainMessage, encryptMessage, userPubkey){
+function verifyDigitalSignature(plainMessage, encryptMessage, userPubkeyPem){
 	//TODO accept user object instead of userPubkey
 	var verifier = ursa.createVerifier(hashMethod);
+	var userPubKey = ursa.createPublicKey(userPubkeyPem, "utf8");
 	verifier.update(plainMessage);
-	if(verifier.verify(userPubkey, encryptMessage, 'base64')) {
+	if(verifier.verify(userPubKey, encryptMessage, 'base64')) {
 		console.log(encryptMessage, " matches the user");
 		return true;
 	} else {
