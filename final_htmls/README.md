@@ -2,7 +2,7 @@
 
 ## TODO
 ```
-1. login, logout, maybe register
+1. login, logout
 2. userlist and BAN
 3. ANYTHING about SQL
 4. youtube video should auto-play
@@ -39,4 +39,8 @@ node server.js
 ## requirement
 ```
 npm install ursa
+```
+## Need test
+```
+register
 ```

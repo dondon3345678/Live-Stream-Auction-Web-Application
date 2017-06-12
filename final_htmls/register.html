@@ -4,7 +4,6 @@
     </head>
 	<script>
 		var socket = io();
-		var status = true;
 		window.onload = (event) => {
 			document.querySelector("register_submit").onclick = (event) => {
 				event.preventDefault();
@@ -23,9 +22,13 @@
 				});
 			}
 		}
+		socket.on("register", function(data){
+			// show message
+			alert(data['message']);
+		});
 	</script>
     <body>
-		<form action='/register.html' method='POST'>
+		<form>
             <h1>Register</h1>
             <p>
                 <label for="username">Username</label>
