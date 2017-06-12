@@ -64,13 +64,15 @@ var currentPlayer = '';
 var currentIndex = 0;
 var startAuction = 0;
 var productList = [];
+var userList = [];
 
 io.on('connection', function(socket){
     console.log('a user connected');
 
 	socket.on('add user',function(msg){
-		socket.username = msg;
+		userList.push(msg);
 		console.log("new user:"+msg+" logged.");
+		socket.username = msg;
 		socket.broadcast.to(socket.id).emit('update info', {
 			streamID: productList[currentIndex].streamID,
         	itemName: productList[currentIndex].itemName,
@@ -80,6 +82,9 @@ io.on('connection', function(socket){
 		});
 		io.emit('add user',{
 			username: socket.username
+		});
+		io.emit('list update',{
+			userList: userList
 		});
 	});
     socket.on('update info', function(data){
@@ -179,6 +184,14 @@ io.on('connection', function(socket){
 		result['status_code'] = 200;
 		socket.broadcast.to(socket.id).emit(result);
 		return;
+	});
+	socket.on('disconnect',function(){			// listen for socket closed
+		var index = userList.indexOf(socket.username);
+		userList.splice(index, index);
+		console.log(socket.username+" left.");
+		io.emit('list update',{
+			userList: userList
+		});
 	});
 });
 

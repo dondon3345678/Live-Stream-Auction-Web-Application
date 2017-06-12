@@ -114,7 +114,9 @@ input {
 			document.querySelector("#money").innerHTML = data.price;
 			document.querySelector("#bidder").innerHTML = data.username;
 		});
-
+		socket.on('list update', function(data){
+			document.querySelector("#userlist").innerHTML = data.userList;
+		});
 
 		$(function() {
 			var video = $('#video');
@@ -171,7 +173,7 @@ input {
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4 col-xs-12"><h2>Bidder List</h2></div>
+		<div class="col-md-4 col-xs-12"><h2>Bidder List</h2><span id="userlist"></span></div>
 		<div class="col-md-4 col-xs-12">
 			<div id="message_block" style="border: 1px white solid">
     			<ul id="messages"></ul>
