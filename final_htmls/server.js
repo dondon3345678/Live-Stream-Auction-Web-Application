@@ -52,9 +52,14 @@ app.get('/index_seller.html', function(req, res){
 app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
 });
+
+
 var currentPrice = 0;
-var startAuction = 0;
 var currentPlayer = '';
+var currentIndex = 0;
+var startAuction = 0;
+// var product = {name: "", owner: "", price: 0, time: ""};
+var productList[] = '';
 
 io.on('connection', function(socket){
     console.log('a user connected');
@@ -71,23 +76,26 @@ io.on('connection', function(socket){
     	// console.log(data.streamID);
     	console.log(data.startAuction);
     	if (data.startAuction == "false") {
-    		currentPrice = 0;		// restart new bid
+    		// restart new bid
     		startAuction = 0;
+    		var product = {name: "", owner: "", price: 0, time: ""};
+    		productList.push(product);
+    		currentIndex = productList.length-1;
     	} else {
     		startAuction = 1;
     	}
+    	productList[currentIndex].name = data.itemName;
 
         io.emit('update info',{
         		streamID: data.streamID,
         		itemName: data.itemName,
-        		// priceGap: data.priceGap,
         		startAuction: data.startAuction,
-        		currentPrice: currentPrice
+        		// currentPrice: currentPrice
+        		currentPrice: productList[currentIndex].price
         });	
     });
     socket.on('chat message', function(msg){
 		console.log("chat: "+msg);
-  		//發佈新訊息
 		io.emit('chat message', {
 			username: socket.username,
 			msg: msg
@@ -116,12 +124,12 @@ http.listen(3000,function(){
 
 function compare_price(player, price) {
 	var result;
-	if (price <= currentPrice) result="FAIL";			// a
-	else if (!startAuction) result="FAIL";				// b
-	else if (currentPlayer==player)	result="FAIL";		// c
+	if (price <= productList[currentIndex].price) result="FAIL";			// a
+	else if (!startAuction) result="FAIL";									// b
+	else if (productList[currentIndex].owner==player)	result="FAIL";		// c
 	else {
-		currentPrice = price;							// SUCCESS
-		currentPlayer = player;
+		productList[currentIndex].price = price;							// SUCCESS
+		productList[currentIndex].owner = player;
 		result="SUCCESS"
 	}
 

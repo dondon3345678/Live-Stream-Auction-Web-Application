@@ -77,7 +77,7 @@ input {
 <script>
 	var socket = io();
 	var username = prompt("請輸入暱稱","guest");		// need to change
-	var status = true;
+	var status = false;
 	socket.emit('add user', username);
 	socket.on('add user',function(data){
 		appendMessage(data.username+"已加入");
@@ -96,7 +96,6 @@ input {
 	        } else {
 	        	status = false;
 	        }
-	        
 	        socket.emit('update info', {
 	        		itemName: itemName,
 	        		streamID: streamID,
