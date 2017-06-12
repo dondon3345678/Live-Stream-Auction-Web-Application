@@ -78,10 +78,6 @@ input {
 	var socket = io();
 	var username = prompt("請輸入暱稱","guest");		// need to change
 	var status = false;
-	socket.emit('add user', username);
-	socket.on('add user',function(data){
-		appendMessage(data.username+"已加入");
-	});
 
 	window.onload = (event) => {
 		document.querySelector("#submit").onclick = (event) => {
@@ -96,27 +92,26 @@ input {
 	        } else {
 	        	status = false;
 	        }
-	        socket.emit('update info', {
+	        socket.broadcast.emit('first update info', {
 	        		itemName: itemName,
 	        		streamID: streamID,
-	        		// priceGap: priceGap,
 	        		startAuction: status
 	        });
 		}
-		socket.on('add user', function(data){
-			appendMessage(data.username+"已加入");
-			// reload userlist
-		});
-		socket.on('chat message', function(data){
-			appendMessage(data.username+": "+data.msg);
-		});
-		socket.on('new bid', function(data){
-			document.querySelector("#money").innerHTML = data.price;
-			document.querySelector("#bidder").innerHTML = data.username;
-		});
-		socket.on('list update', function(data){
-			document.querySelector("#userlist").innerHTML = data.userList;
-		});
+        socket.on('add user', function(data){
+            appendMessage(data.username+"已加入");
+            // reload userlist
+        });
+        socket.on('chat message', function(data){
+            appendMessage(data.username+": "+data.msg);
+        });
+        socket.on('new bid', function(data){
+            document.querySelector("#money").innerHTML = data.price;
+            document.querySelector("#bidder").innerHTML = data.username;
+        });
+        socket.on('list update', function(data){
+            document.querySelector("#userlist").innerHTML = data.userList;
+        });
 
 		$(function() {
 			var video = $('#video');
@@ -153,6 +148,7 @@ input {
 						商品名稱&nbsp;&nbsp;&nbsp;
 						<input type="text" id="itemName" name="itemName" style="width: 100px;">
 					</div>
+					<input type="button" id="updateProduct" value="Update Product">
 					<div class="row" style="height: 50px;">
 						直播 ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="text" id="streamID" name="streamURL" style="width: 150px;">

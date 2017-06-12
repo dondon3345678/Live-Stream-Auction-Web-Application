@@ -4,8 +4,8 @@ var io = require('socket.io')(http);
 var db = require('./db');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var digtial_sig = require('./digital_sig');
-var crypto = require('crypto');
+//var digtial_sig = require('./digital_sig');
+//var crypto = require('crypto');
 
 var test = 'test'
 app.use(session({secret: 'test'}));
@@ -14,15 +14,19 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 var sess;
 
-app.get('/', function(req, res){
+    app.get('/', function(req, res){
       sess = req.session;
       if(sess.user){
-          res.redirect('/index_seller.html');
+          if(sess.type =='regular'){
+            res.redirect('/index_bidder.html');
+          }else{
+            res.redirect('/index_seller.html');
+          }
       }else{
           res.redirect( '/login.html');
       }
-});
-app.post('/login.html', function(req,res){
+    });
+    app.post('/login.html', function(req,res){
       console.log(req.body.username);
       console.log(req.body.password);
       sess = req.session;
@@ -34,6 +38,7 @@ app.post('/login.html', function(req,res){
         }else{
             console.log(req.body.username+" log in");
             sess.user = req.body.username;
+            sess.type = rows[0].type;
             if(rows[0].type == 'regular'){
                 res.redirect('/index_bidder.html');
             }else{
@@ -42,73 +47,76 @@ app.post('/login.html', function(req,res){
             }
         }
       })
-});
+    });
 
 
-app.get('/login.html', function(req,res){
+    app.get('/login.html', function(req,res){
     res.sendFile(__dirname+'/login.html');
-});
-app.get('/index_seller.html', function(req, res){
+    });
+    app.get('/index_seller.html', function(req, res){
       res.sendFile(__dirname + '/index_seller.html');
-});
-app.get('/index_bidder.html', function(req, res){
+    });
+    app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
-});
-
-app.get('/register.html', function(req, res){
-	res.sendFile(__dirname + '/register.html');
-});
-
+    });
+    app.get('/register.html', function(req, res){
+    res.sendFile(__dirname + '/register.html');
+    });
 var currentPrice = 0;
 var currentPlayer = '';
 var currentIndex = 0;
-var startAuction = 0;
+var product = {name: "", owner: "?", price: 0, time: ""};
+var streamID = "";
+var startAuction = "True";
 var productList = [];
 var userList = [];
 
 io.on('connection', function(socket){
     console.log('a user connected');
 
-	socket.on('add user',function(msg){
+	socket.on('add new user',function(msg){
 		userList.push(msg);
-		console.log("new user:"+msg+" logged.");
+		console.log("new user:" +msg+ " logged.");
 		socket.username = msg;
-		socket.broadcast.to(socket.id).emit('update info', {
-			streamID: productList[currentIndex].streamID,
-        	itemName: productList[currentIndex].itemName,
-        	currentOwner: productList[currentIndex].owner,
+        console.log(socket.username);
+        //send some info to this new bidder
+		socket.emit('first time add', {
+			streamID: streamID,
+        	itemName: product.name,
+        	currentOwner: product.owner,
+       		currentPrice: product.price,
         	startAuction: startAuction,
-       		currentPrice: productList[currentIndex].price
 		});
-		io.emit('add user',{
+		io.emit('add new user',{
 			username: socket.username
 		});
 		io.emit('list update',{
 			userList: userList
 		});
 	});
-    socket.on('update info', function(data){
-    	console.log('update info');
+    socket.on('seller start', function(data){
+        //This is for Seller to update product info
+    	console.log('seller start');
     	// console.log(data.streamID);
     	console.log(data.startAuction);
-    	if (data.startAuction == "false") {
-    		// restart new bid
-    		startAuction = "false";
-    		var product = {name: "", owner: "", price: 0, time: "", streamID: ""};
-    		productList.push(product);
-    		currentIndex = productList.length-1;
-    	} else {
-    		startAuction = "true";
-    	}
-    	productList[currentIndex].name = data.itemName;
-    	productList[currentIndex].streamID = data.streamID;
+        // restart new bid
+        startAuction = data.startAuction;
+        streamID = data.streamID;
+        product.name = data.itemName;
+        product.owner="?";
+        product.price=0;
+        product.time=Date.now();
+    		//productList.push(product);
+    		//currentIndex = productList.length-1;
+    	    //productList[currentIndex].name = data.itemName;
+    	    //productList[currentIndex].streamID = data.streamID;
 
-        io.emit('update info',{
-        		streamID: data.streamID,
-        		itemName: data.itemName,
-        		startAuction: data.startAuction,
-        		currentPrice: productList[currentIndex].price,
-        		currentOwner: productList[currentIndex].owner
+        io.emit('seller start',{
+        		streamID: streamID,
+        		itemName: product.name,
+        		startAuction: startAuction,
+        		currentPrice: product.price,
+        		currentOwner: product.owner
         });	
     });
     socket.on('chat message', function(msg){
@@ -118,21 +126,22 @@ io.on('connection', function(socket){
 			msg: msg
 		});
 	});
-	socket.on('new bid', function(price){
-		console.log('new bid: '+price);
+	socket.on('new bid', function(data){
+		console.log('new bid come from '+ socket.username + ' price is '+data.bid);
 		
-		// if (currentPrice < price) {
-		// 	currentPrice = price;
-		// }
-		var result = compare_price(socket.username, price);
+		var result = compare_price(socket.username, data);
 		socket.broadcast.to(socket.id).emit(result);	// emit to special player
-		
-		console.log('now price: '+currentPrice);
-		io.emit('new bid', {
-			username: socket.username,
-			price: currentPrice
-		});
+	    if(result=='SUCCESS'){	
+            console.log('Bid is SUCCESSFUL, now price: '+currentPrice+ ',owner is '+ socket.username);
+            io.emit('new bid', {
+                username: socket.username,
+                price: product.price
+            });
+        }else{
+            console.log('Bid Fail');
+        }
 	});
+    /*
 	socket.on('register', function(req){
 	    var hash = crypto.createHash('sha256');
 	    var username = req.body.username;
@@ -185,6 +194,7 @@ io.on('connection', function(socket){
 		socket.broadcast.to(socket.id).emit(result);
 		return;
 	});
+    */
 	socket.on('disconnect',function(){			// listen for socket closed
 		var index = userList.indexOf(socket.username);
 		userList.splice(index, index);
@@ -199,15 +209,19 @@ http.listen(3000,function(){
     console.log('listening on port 3000');
 });
 
-function compare_price(player, price) {
+function compare_price(player, data) {
 	var result;
-	if (price <= productList[currentIndex].price) result="FAIL";			// a
-	else if (startAuction=="false") result="FAIL";									// b
-	else if (productList[currentIndex].owner==player)	result="FAIL";		// c
-	else {
-		productList[currentIndex].price = price;							// SUCCESS
-		productList[currentIndex].owner = player;
-		result="SUCCESS";
+    var timeStamp = data.bidTime;
+    var price = data.bid;
+	if (price <= product.price) result="FAIL";			// a
+	else if (startAuction=="false") result="FAIL";		// b
+	else if (product.owner==player)	result="FAIL";		// c
+	else if (timeStamp < product.time) result="FAIL";   // later bid
+    else {
+		product.price = price;							// SUCCESS,update product info on server
+		product.owner = player;
+		product.time = timeStamp;
+        result="SUCCESS";
 	}
 	return result;
 }

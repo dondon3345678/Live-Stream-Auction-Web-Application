@@ -76,12 +76,13 @@ input, button {
 	var username = prompt("請輸入暱稱","guest");		// need to change
 	var currentPrice = 0;
 
-	socket.emit('add user', username);
-	socket.on('add user',function(data){
+	socket.emit('add new user', username);
+	
+    socket.on('add new user',function(data){
 		appendMessage(data.username+"已加入");
 	});
 
-	socket.on('update info',function(data){
+	socket.on('first time add',function(data){
 	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID+"?autoplay=1";
 		document.querySelector("#itemName").innerHTML = data.itemName;
 		// document.querySelector("#itemDep").innerHTML = data.itemDep;
@@ -92,11 +93,10 @@ input, button {
 			document.querySelector("#bid").disabled = true;
 		} else {
 			document.querySelector("#status").innerHTML = "拍賣中";
-			// document.querySelector("#status").style.color = red;
 			document.getElementById("status").style.color = "green";
 		}
-		currentPrice = data.currentPrice;
-		currentOwner = data.currentOwner;
+		document.querySelector("#money").innerHTML = data.currentPrice;
+		document.querySelector("#bidder").innerHTML = data.currentOwner;
 
 	});
 	socket.on('chat message', function(data){
@@ -114,7 +114,7 @@ input, button {
 	}
 	function newBid(){
 		let price = document.querySelector("#price").value;
-		socket.emit('new bid', price);
+		socket.emit('new bid', {bid: price, bidTime: Date.now()});
 	}
 	function appendMessage(msg){
 		$('#messages').append($('<li>').text(msg));
