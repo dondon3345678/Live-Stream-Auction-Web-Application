@@ -60,17 +60,31 @@ app.get('/register.html', function(req, res){
 });
 
 var currentPrice = 0;
-var startAuction = 0;
 var currentPlayer = '';
+var currentIndex = 0;
+var startAuction = 0;
+var productList = [];
+var userList = [];
 
 io.on('connection', function(socket){
     console.log('a user connected');
 
 	socket.on('add user',function(msg){
-		socket.username = msg;
+		userList.push(msg);
 		console.log("new user:"+msg+" logged.");
+		socket.username = msg;
+		socket.broadcast.to(socket.id).emit('update info', {
+			streamID: productList[currentIndex].streamID,
+        	itemName: productList[currentIndex].itemName,
+        	currentOwner: productList[currentIndex].owner,
+        	startAuction: startAuction,
+       		currentPrice: productList[currentIndex].price
+		});
 		io.emit('add user',{
 			username: socket.username
+		});
+		io.emit('list update',{
+			userList: userList
 		});
 	});
     socket.on('update info', function(data){
@@ -78,23 +92,27 @@ io.on('connection', function(socket){
     	// console.log(data.streamID);
     	console.log(data.startAuction);
     	if (data.startAuction == "false") {
-    		currentPrice = 0;		// restart new bid
-    		startAuction = 0;
+    		// restart new bid
+    		startAuction = "false";
+    		var product = {name: "", owner: "", price: 0, time: "", streamID: ""};
+    		productList.push(product);
+    		currentIndex = productList.length-1;
     	} else {
-    		startAuction = 1;
+    		startAuction = "true";
     	}
+    	productList[currentIndex].name = data.itemName;
+    	productList[currentIndex].streamID = data.streamID;
 
         io.emit('update info',{
         		streamID: data.streamID,
         		itemName: data.itemName,
-        		// priceGap: data.priceGap,
         		startAuction: data.startAuction,
-        		currentPrice: currentPrice
+        		currentPrice: productList[currentIndex].price,
+        		currentOwner: productList[currentIndex].owner
         });	
     });
     socket.on('chat message', function(msg){
 		console.log("chat: "+msg);
-  		//發佈新訊息
 		io.emit('chat message', {
 			username: socket.username,
 			msg: msg
@@ -103,16 +121,16 @@ io.on('connection', function(socket){
 	socket.on('new bid', function(price){
 		console.log('new bid: '+price);
 		
-		if (currentPrice < price) {
-			currentPrice = price;
-		}
-		// var result = compare_price(socket.username, price);
-		// socket.broadcast.to(socket.id).emit(result);	// emit to special player
+		// if (currentPrice < price) {
+		// 	currentPrice = price;
+		// }
+		var result = compare_price(socket.username, price);
+		socket.broadcast.to(socket.id).emit(result);	// emit to special player
 		
 		console.log('now price: '+currentPrice);
 		io.emit('new bid', {
 			username: socket.username,
-			price: currentPrice,
+			price: currentPrice
 		});
 	});
 	socket.on('register', function(req){
@@ -166,6 +184,15 @@ io.on('connection', function(socket){
 		result['status_code'] = 200;
 		socket.broadcast.to(socket.id).emit(result);
 		return;
+	});
+	socket.on('disconnect',function(){			// listen for socket closed
+		var index = userList.indexOf(socket.username);
+		userList.splice(index, index);
+		console.log(socket.username+" left.");
+		io.emit('list update',{
+			userList: userList
+		});
+	});
 });
 
 http.listen(3000,function(){
@@ -174,20 +201,13 @@ http.listen(3000,function(){
 
 function compare_price(player, price) {
 	var result;
-	if (price <= currentPrice) result="FAIL";			// a
-	else if (!startAuction) result="FAIL";				// b
-	else if (currentPlayer==player)	result="FAIL";		// c
+	if (price <= productList[currentIndex].price) result="FAIL";			// a
+	else if (startAuction=="false") result="FAIL";									// b
+	else if (productList[currentIndex].owner==player)	result="FAIL";		// c
 	else {
-		currentPrice = price;							// SUCCESS
-		currentPlayer = player;
-		result="SUCCESS"
+		productList[currentIndex].price = price;							// SUCCESS
+		productList[currentIndex].owner = player;
+		result="SUCCESS";
 	}
-
-	/* COMPARE
-	a.價錢小於目前最高價 FAIL
-	b.此商品已經結標 FAIL
-	c.自己已經是目前的最高價出標者 FAIL
-	d.比別人晚出價 FAIL
-	e.SUCCESS */
-		
+	return result;
 }

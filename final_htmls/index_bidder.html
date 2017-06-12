@@ -82,15 +82,10 @@ input, button {
 	});
 
 	socket.on('update info',function(data){
-	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID;
+	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID+"?autoplay=1";
 		document.querySelector("#itemName").innerHTML = data.itemName;
 		// document.querySelector("#itemDep").innerHTML = data.itemDep;
 
-		
-
-
-
-		/* TODO */
 		if (data.startAuction=="false") {
 			document.querySelector("#status").innerHTML = "停止拍賣";
 			document.getElementById("status").style.color = "red";
@@ -100,6 +95,9 @@ input, button {
 			// document.querySelector("#status").style.color = red;
 			document.getElementById("status").style.color = "green";
 		}
+		currentPrice = data.currentPrice;
+		currentOwner = data.currentOwner;
+
 	});
 	socket.on('chat message', function(data){
 		appendMessage(data.username+": "+data.msg);
@@ -123,6 +121,13 @@ input, button {
 		var message = document.getElementById("message_block");
 		message.scrollTop = message.scrollHeight;
 	}
+	function ValidateNumber(e, pnumber)
+	{
+    	if (!/^\d+$/.test(pnumber)) {
+        	$(e).val(/^\d+/.exec($(e).val()));
+    	}
+    	return false;
+	}
 
 </script>
 <body>
@@ -144,7 +149,7 @@ input, button {
 					<div class="row" style="height: 50px;">
 						我要加價&nbsp;&nbsp;&nbsp;
 						<!-- <button id="bid" onclick="newBid();"><span id="interval"></span> NTD</button> -->
-						<input type="number" id="price" style="width: 100px">
+						<input type="number" id="price" style="width: 100px" onkeyup="return ValidateNumber($(this),value)">元
 						<button onclick="newBid();">go</button>
 						<span id="status"></span>
 					</div>
