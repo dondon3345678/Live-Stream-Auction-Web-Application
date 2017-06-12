@@ -53,4 +53,15 @@ npm install ursa
 const db = require("./db.js");
 db.query("your query string", callbackfn);
 ```
+### mysql 
+```mysql
+CREATE DATABASE member;
+CREATE TABLE users(
+   pid INT NOT NULL AUTO_INCREMENT,
+   name VARCHAR(100) NOT NULL,
+   email VARCHAR(40) NOT NULL,
+   password VARCHAR(40) NOT NULL,
+   type VARCHAR(20) NOT NULL,
+   PRIMARY KEY ( pid)
+);
 
