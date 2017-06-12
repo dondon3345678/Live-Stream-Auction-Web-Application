@@ -63,7 +63,6 @@ var currentPrice = 0;
 var currentPlayer = '';
 var currentIndex = 0;
 var startAuction = 0;
-// var product = {name: "", owner: "", price: 0, time: ""};
 var productList[] = '';
 
 io.on('connection', function(socket){
@@ -72,6 +71,13 @@ io.on('connection', function(socket){
 	socket.on('add user',function(msg){
 		socket.username = msg;
 		console.log("new user:"+msg+" logged.");
+		socket.broadcast.to(socket.id).emit('update info', {
+			streamID: productList[currentIndex].streamID,
+        	itemName: productList[currentIndex].itemName,
+        	currentOwner: productList[currentIndex].owner,
+        	startAuction: startAuction,
+       		currentPrice: productList[currentIndex].price
+		});
 		io.emit('add user',{
 			username: socket.username
 		});
@@ -82,21 +88,22 @@ io.on('connection', function(socket){
     	console.log(data.startAuction);
     	if (data.startAuction == "false") {
     		// restart new bid
-    		startAuction = 0;
-    		var product = {name: "", owner: "", price: 0, time: ""};
+    		startAuction = "false";
+    		var product = {name: "", owner: "", price: 0, time: "", streamID: ""};
     		productList.push(product);
     		currentIndex = productList.length-1;
     	} else {
-    		startAuction = 1;
+    		startAuction = "true";
     	}
     	productList[currentIndex].name = data.itemName;
+    	productList[currentIndex].streamID = data.streamID;
 
         io.emit('update info',{
         		streamID: data.streamID,
         		itemName: data.itemName,
         		startAuction: data.startAuction,
-        		// currentPrice: currentPrice
-        		currentPrice: productList[currentIndex].price
+        		currentPrice: productList[currentIndex].price,
+        		currentOwner: productList[currentIndex].owner
         });	
     });
     socket.on('chat message', function(msg){
@@ -109,11 +116,11 @@ io.on('connection', function(socket){
 	socket.on('new bid', function(price){
 		console.log('new bid: '+price);
 		
-		if (currentPrice < price) {
-			currentPrice = price;
-		}
-		// var result = compare_price(socket.username, price);
-		// socket.broadcast.to(socket.id).emit(result);	// emit to special player
+		// if (currentPrice < price) {
+		// 	currentPrice = price;
+		// }
+		var result = compare_price(socket.username, price);
+		socket.broadcast.to(socket.id).emit(result);	// emit to special player
 		
 		console.log('now price: '+currentPrice);
 		io.emit('new bid', {
@@ -181,7 +188,7 @@ http.listen(3000,function(){
 function compare_price(player, price) {
 	var result;
 	if (price <= productList[currentIndex].price) result="FAIL";			// a
-	else if (!startAuction) result="FAIL";									// b
+	else if (startAuction=="false") result="FAIL";									// b
 	else if (productList[currentIndex].owner==player)	result="FAIL";		// c
 	else {
 		productList[currentIndex].price = price;							// SUCCESS

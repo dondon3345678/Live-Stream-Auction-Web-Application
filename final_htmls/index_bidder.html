@@ -86,11 +86,6 @@ input, button {
 		document.querySelector("#itemName").innerHTML = data.itemName;
 		// document.querySelector("#itemDep").innerHTML = data.itemDep;
 
-		
-
-
-
-		/* TODO */
 		if (data.startAuction=="false") {
 			document.querySelector("#status").innerHTML = "停止拍賣";
 			document.getElementById("status").style.color = "red";
@@ -100,6 +95,9 @@ input, button {
 			// document.querySelector("#status").style.color = red;
 			document.getElementById("status").style.color = "green";
 		}
+		currentPrice = data.currentPrice;
+		currentOwner = data.currentOwner;
+
 	});
 	socket.on('chat message', function(data){
 		appendMessage(data.username+": "+data.msg);
