@@ -1,5 +1,7 @@
 var fs = require('fs');
 var ursa = require('ursa');
+var _pubKey, _privKey;
+var _pubPem, _privPem;
 var path_to_priv_key = "./.ppk.pem";
 var path_to_pub_key = "./.pk.pem";
 const hashMethod = "sha256";
@@ -17,40 +19,23 @@ module.exports = {
 function genKeyPair() {
     var keys = ursa.generatePrivateKey(2048);
     
-    var privPem = ursa.createPrivateKey(keys.toPrivatePem());
-    var privKey = privPem.toPrivatePem('utf8');
+    _privPem = ursa.createPrivateKey(keys.toPrivatePem());
+    _privKey = _privPem.toPrivatePem('utf8');
     
-    fs.writeFile(path_to_priv_key, privKey, 'utf8', function(error){
-		if(error){
-			throw error;
-		} else {
-			console.log("Create private key success\n");
-		}
-	});
-    
-    var pubPem = ursa.createPublicKey(keys.toPublicPem());
-    var pubKey = pubPem.toPublicPem('utf8');
-    fs.writeFile(path_to_pub_key, pubKey, 'utf8', function(error){
-		if(error){
-			throw error;
-		} else {
-			console.log("Create public key success\n");
-		}
-	});
+    _pubPem = ursa.createPublicKey(keys.toPublicPem());
+    _pubKey = _pubPem.toPublicPem('utf8');
 	return;
 };
 
 
 function getUserPrivKey(){
-	var privKey = ursa.createPrivateKey(fs.readFileSync(path_to_priv_key));
-	return privKey;
+	return _privPem;
 };
 
 
 function getUserPubKey(){
 	// why would user need to get pub key?
-	var pubKey = ursa.createPublicKey(fs.readFileSync(path_to_pub_key));
-	return pubKey;
+	return _pubPem;
 };
 
 
