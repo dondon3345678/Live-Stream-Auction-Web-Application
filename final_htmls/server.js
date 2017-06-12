@@ -63,7 +63,7 @@ var currentPrice = 0;
 var currentPlayer = '';
 var currentIndex = 0;
 var startAuction = 0;
-var productList[] = '';
+var productList = [];
 
 io.on('connection', function(socket){
     console.log('a user connected');
@@ -125,7 +125,7 @@ io.on('connection', function(socket){
 		console.log('now price: '+currentPrice);
 		io.emit('new bid', {
 			username: socket.username,
-			price: currentPrice,
+			price: currentPrice
 		});
 	});
 	socket.on('register', function(req){
@@ -179,6 +179,7 @@ io.on('connection', function(socket){
 		result['status_code'] = 200;
 		socket.broadcast.to(socket.id).emit(result);
 		return;
+	});
 });
 
 http.listen(3000,function(){
@@ -193,14 +194,7 @@ function compare_price(player, price) {
 	else {
 		productList[currentIndex].price = price;							// SUCCESS
 		productList[currentIndex].owner = player;
-		result="SUCCESS"
+		result="SUCCESS";
 	}
-
-	/* COMPARE
-	a.價錢小於目前最高價 FAIL
-	b.此商品已經結標 FAIL
-	c.自己已經是目前的最高價出標者 FAIL
-	d.比別人晚出價 FAIL
-	e.SUCCESS */
-		
+	return result;
 }

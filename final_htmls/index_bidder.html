@@ -82,7 +82,7 @@ input, button {
 	});
 
 	socket.on('update info',function(data){
-	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID;
+	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID+"?autoplay=1";
 		document.querySelector("#itemName").innerHTML = data.itemName;
 		// document.querySelector("#itemDep").innerHTML = data.itemDep;
 
