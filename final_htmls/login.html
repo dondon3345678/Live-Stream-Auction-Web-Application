@@ -14,6 +14,34 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
         <link rel="stylesheet" href="assets/css/main.css" />
         <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 </head>
+<script>
+	var socket = io();
+	var crypto = require("crypto");
+	var dig = require("./digital_sig");
+	window.onload = (event) => {
+		document.querySelector("#submit").onclick = (event) => {
+			event.preventDefault();
+			var keys = dig.genKeyPair();
+			let username = document.querySelector("#username").value;
+			let password = document.querySelector("#password").value;
+			var hash = crypto.createHash("sha256");
+			var hashedPassword = hash.update(password).digest("hex");
+			var d = new Date();
+			var submitTime = d.getTime();
+			var pubKeyPem = dig.getUserPubKeyPem();
+
+
+			socket.emit("login", {
+				username: username,
+				password: password,
+				time: submitTime,
+				pubKeyPem: pubKeyPem,
+			});
+			socket.on("login", {
+			});
+		}
+	}
+</script>
 <body>
 
         <!-- Wrapper -->
@@ -32,9 +60,9 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
                 </header>
                 <div align="center">
                         <form action="">
-                                user: <input type="text"><br>
-                                pass: <input type="password"><br><br>
-                                <input type="submit" value="login">
+                                user: <input type="text" id="username"><br>
+                                pass: <input type="password" id="password"><br><br>
+                                <input type="submit" value="login" id="submit">
                         </form>
                 </div>
 
