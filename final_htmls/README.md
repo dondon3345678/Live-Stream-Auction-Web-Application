@@ -3,12 +3,12 @@
 ## TODO
 
 - [ ] login, logout
-- [ ] userlist and BAN
+- [ ] BAN
 - [ ] ANYTHING about SQL
 - [ ] 當seller'開始拍賣'的關起來的時候，所有的bid都return fail
 - [ ] 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
 - [ ] end auction後server該做什麼？傳給seller下標者的資訊嗎？
-- [ ] 排版
+- [ ] userlist的排版
 - [ ] client send bid(get current price, +10, send to server), need to define the interface
 - [ ] server receive bid and update
 
@@ -35,6 +35,7 @@ node server.js
 - [x] youtube video auto-play
 - [x] seller 更新之後 bidder 才進來，該怎麼更新？
 --> 傳給他現有的資料更新
+- [x] userList 傳送與更新（剩下排版跟處理傳入的東西）
 
 ## requirement
 ```
