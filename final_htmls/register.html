@@ -2,8 +2,30 @@
 <html>
     <head>
     </head>
+	<script>
+		var socket = io();
+		var status = true;
+		window.onload = (event) => {
+			document.querySelector("register_submit").onclick = (event) => {
+				event.preventDefault();
+				let username = document.querySelector("#username").value;
+				let password = document.querySelector("#password").value;
+				let confirm_password = document.querySelector("#confirm_password").value;
+				let email = document.querySelector("#email").value;
+				var d = new Date();
+				var time = d.getTime();
+				socket.emit("register", {
+					username: username,
+					password: password,
+					confrim_password: confirm_password,
+					email: email,
+					submitTime: time,
+				});
+			}
+		}
+	</script>
     <body>
-		<form action=?>
+		<form action='/register.html' method='POST'>
             <h1>Register</h1>
             <p>
                 <label for="username">Username</label>
@@ -18,7 +40,11 @@
                 <input id="confirm_password" name="confirm_password" required="required" type="password" placeholder="confrim password">
             </p>
             <p>
-                <input type="button" value="signup">
+                <label for="email">Email</label>
+                <input id="email" name="email" required="required" type="text" placeholder="email@example.com">
+            </p>
+            <p>
+                <input type="button" value="signup" name="register_submit">
             </p>
 		</form>
     </body>
