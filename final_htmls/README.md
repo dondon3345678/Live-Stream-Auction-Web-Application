@@ -14,6 +14,7 @@
   b.此商品已經結標 FAIL
   c.自己已經是目前的最高價出標者 FAIL
   d.SUCCESS
+  e.比別人晚出價
 7. end auction後server該做什麼？
 8. 所有的排版加油 O_<
 
@@ -34,4 +35,6 @@ node server.js
 3. start and end auction (end時最高金額reset為0，server的處理還沒有加上)
 ```
 ## requirement
+```
 npm install ursa
+```
