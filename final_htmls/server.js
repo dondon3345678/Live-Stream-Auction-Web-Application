@@ -53,6 +53,8 @@ app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
 });
 var currentPrice = 0;
+var startAuction = 0;
+var currentPlayer = '';
 
 io.on('connection', function(socket){
     console.log('a user connected');
@@ -69,8 +71,11 @@ io.on('connection', function(socket){
     	// console.log(data.streamID);
     	console.log(data.startAuction);
     	if (data.startAuction == "false") {
-    		currentPrice = 0;
-    	}		// restart new bid
+    		currentPrice = 0;		// restart new bid
+    		startAuction = 0;
+    	} else {
+    		startAuction = 1;
+    	}
 
         io.emit('update info',{
         		streamID: data.streamID,
@@ -90,13 +95,14 @@ io.on('connection', function(socket){
 	});
 	socket.on('new bid', function(price){
 		console.log('new bid: '+price);
-		// need to compare
-
+		
 		if (currentPrice < price) {
 			currentPrice = price;
 		}
+		// var result = compare_price(socket.username, price);
+		// socket.broadcast.to(socket.id).emit(result);	// emit to special player
+		
 		console.log('now price: '+currentPrice);
-
 		io.emit('new bid', {
 			username: socket.username,
 			price: currentPrice,
@@ -107,3 +113,23 @@ io.on('connection', function(socket){
 http.listen(3000,function(){
     console.log('listening on port 3000');
 });
+
+function compare_price(player, price) {
+	var result;
+	if (price <= currentPrice) result="FAIL";			// a
+	else if (!startAuction) result="FAIL";				// b
+	else if (currentPlayer==player)	result="FAIL";		// c
+	else {
+		currentPrice = price;							// SUCCESS
+		currentPlayer = player;
+		result="SUCCESS"
+	}
+
+	/* COMPARE
+	a.價錢小於目前最高價 FAIL
+	b.此商品已經結標 FAIL
+	c.自己已經是目前的最高價出標者 FAIL
+	d.比別人晚出價 FAIL
+	e.SUCCESS */
+		
+}
