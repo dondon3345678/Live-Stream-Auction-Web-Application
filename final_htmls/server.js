@@ -150,13 +150,14 @@ io.on('connection', function(socket){
             console.log('Bid Fail');
         }
 	});
-    /*
-	socket.on('register', function(req){
-	    var username = req.body.username;
-	    var password = req.body.passowrd;
-	    var confirm_password = req.body.password;
-	    var eamil = req.body.email;
-		var time = req.body.submitTime;
+	socket.on('register', function(data){
+	    var hash = crypto.createHash('md5');
+	    var username = data['username'];
+	    var password = data['passowrd'];
+	    var confirm_password = data['confirm_password'];
+	    var eamil = data['email'];
+		//var time = data['submitTime'];
+		var usertype = data['usertype'];
 
 		var result = {};
 	    if(password != confirm_password){
@@ -186,7 +187,7 @@ io.on('connection', function(socket){
 	    	};
 	    });
 	    // write to DB
-		db.query("insert into user (name, password, email, timesatmp) values ?", [username, hashedPassword, email, timestamp], function(error, result){
+		db.query("insert into user (name, password, email, type) values ?", [username, hashedPassword, email, usertype], function(error, result){
 			if(error){
 				console.log(error);
 				result['message'] = "Internal Server Error";
@@ -197,12 +198,10 @@ io.on('connection', function(socket){
 		});
 		// success
 		result['message'] = "success";
-		result['username'] = username;
 		result['status_code'] = 200;
 		socket.broadcast.to(socket.id).emit(result);
 		return;
 	});
-    */
 	socket.on('disconnect',function(){			// listen for socket closed
 		var index = userList.indexOf(socket.username);
 		userList.splice(index, index);

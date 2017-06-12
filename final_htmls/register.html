@@ -12,8 +12,17 @@
 				let password = hash.update(document.querySelector("#password").value;
 				let confirm_password = document.querySelector("#confirm_password").value;
 				let email = document.querySelector("#email").value;
+				let types = document.getElementsByName("usertype");
+
+				var usertype;
+				if(types[0].checked){
+					usertype = types[0].value;
+				} else {
+					usertype = types[1].value;
+				}
+
 				var d = new Date();
-				var time = d.getTime();
+				var current_time = d.getTime();
 
 				var hash = crypto.createHash("sha256");
 				var hashedPassword = hash.update(password).digest("hex");
@@ -23,9 +32,10 @@
 				socket.emit("register", {
 					username: username,
 					password: hashedPassword,
-					confrim_password: hashedConfirmPassword,
+					usertype: usertype,
+					confirm_password: hashedConfirmPassword,
 					email: email,
-					submitTime: time,
+					submitTime: current_time,
 				});
 			}
 		}
@@ -39,20 +49,25 @@
             <h1>Register</h1>
             <p>
                 <label for="username">Username</label>
-                <input id="username" name="username" required="required" type="text" placeholder="username">
+                <input id="username" name="username" required="required" type="text" placeholder="username" required autofocus>
             </p>
             <p>
                 <label for="pasword">Password</label>
-                <input id="password" name="password" required="required" type="password" placeholder="password">
+                <input id="password" name="password" required="required" type="password" placeholder="password" required>
             </p>
             <p>
                 <label for="confirm_pasword">Confrim Password</label>
-                <input id="confirm_password" name="confirm_password" required="required" type="password" placeholder="confrim password">
+                <input id="confirm_password" name="confirm_password" required="required" type="password" placeholder="confrim password" required>
             </p>
             <p>
                 <label for="email">Email</label>
-                <input id="email" name="email" required="required" type="text" placeholder="email@example.com">
+                <input id="email" name="email" required="required" type="text" placeholder="email@example.com" required>
             </p>
+			<p>
+				<label for="usertype">Type</label>
+				<input id="bidder" name="usertype" value="bidder" checked>Bidder<br>
+				<input id="seller" name="usertype" value="seller">Seller<br>
+			</p>
             <p>
                 <input type="button" value="signup" id="register_submit">
             </p>
