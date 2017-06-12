@@ -118,6 +118,49 @@ io.on('connection', function(socket){
 			msg: msg
 		});
 	});
+	socket.on('login', function(data){
+		var hash = crypto.createHash('sha256');
+		var name = data['username'];
+		var password = data['password'];
+		var pubkey = data['pubKeyPem'];
+		var time = data['time'];
+		var hashedPassword = hash.update(password).digest('hex');
+
+		var result = {};
+		// check username and password
+		db.query('select * from user where name = ? and password = ?', [name, hashedPassword], function(error, results, fields){
+			if(error){
+				console.log(error.message);
+				result['message'] = 'Internal Server Error';
+				result['status_code'] = 500;
+				socket.broadcast.to(socket.id).emit(result);
+				return;
+			}
+			if(results.length == 0){
+				result['message'] = 'username or password incorrect';;
+				result['message'] = 401;
+				socket.broadcast.to(socket.id).emit(result);
+				return;
+			} 
+		});
+		// write time and pubKeyPem to database
+		db.query('update user set pubkey = ? timestamp = ? where name = ? and password = ?',
+			[pubkey, time, name, hashedPassword], function(error, result){
+				if(error){
+					console.log(error.message);
+					result['message'] = 'Internal Server Error';
+					result['status_code'] = 500;
+					socket.broadcast.to(socket.id).emit(result);
+				}
+				//
+			}
+		);
+		result['message'] = 'success';
+		result['status_code'] = 200;
+		socket.broadcast.to(socket.id).emit(result);
+		return;
+	});
+
 	socket.on('new bid', function(price){
 		console.log('new bid: '+price);
 		
@@ -169,7 +212,7 @@ io.on('connection', function(socket){
 	    	};
 	    });
 	    // write to DB
-		db.query("insert into user (name, password, email, timesatmp) values ?", [username, hashedPassword, email, timestamp], function(error, result){
+		db.query("insert into user (name, password, email, timestamp) values ?", [username, hashedPassword, email, timestamp], function(error, result){
 			if(error){
 				console.log(error);
 				result['message'] = "Internal Server Error";

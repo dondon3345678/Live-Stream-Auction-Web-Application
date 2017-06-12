@@ -37,7 +37,8 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 				time: submitTime,
 				pubKeyPem: pubKeyPem,
 			});
-			socket.on("login", {
+			socket.on("login", function(result){
+				alert(result['message']);
 			});
 		}
 	}
