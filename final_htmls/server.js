@@ -150,7 +150,7 @@ io.on('connection', function(socket){
 			return;
 	    }
 	    hash.update(password);
-	    var hashedPassword = hash.digest('base64');
+	    var hashedPassword = hash.digest('hex');
 
 	    db.query("select 1 from user where name = ? order by name limit 1", [username], function(error, results, fields){
 	    	if(error){
