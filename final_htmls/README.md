@@ -6,7 +6,6 @@
 - [ ] BAN
 - [ ] ANYTHING about SQL
 - [ ] 當seller'開始拍賣'的關起來的時候，所有的bid都return fail
-- [ ] 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
 - [ ] end auction後server該做什麼？傳給seller下標者的資訊嗎？
 - [ ] userlist的排版
 - [ ] client send bid(get current price, +10, send to server), need to define the interface
@@ -43,4 +42,5 @@ npm install ursa
 ```
 ## Need test
 
-- [x] register
+- [ ] register
+- [ ] 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
