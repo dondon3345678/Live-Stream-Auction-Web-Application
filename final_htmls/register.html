@@ -4,19 +4,26 @@
     </head>
 	<script>
 		var socket = io();
+		var crypto = require("crypto");
 		window.onload = (event) => {
 			document.querySelector("register_submit").onclick = (event) => {
 				event.preventDefault();
 				let username = document.querySelector("#username").value;
-				let password = document.querySelector("#password").value;
+				let password = hash.update(document.querySelector("#password").value;
 				let confirm_password = document.querySelector("#confirm_password").value;
 				let email = document.querySelector("#email").value;
 				var d = new Date();
 				var time = d.getTime();
+
+				var hash = crypto.createHash("sha256");
+				var hashedPassword = hash.update(password).digest("hex");
+				hash = crypto.createHash("sha256");
+				var hashedConfirmPassword = hash.update(confirm_password).digest("hex");
+
 				socket.emit("register", {
 					username: username,
-					password: password,
-					confrim_password: confirm_password,
+					password: hashedPassword,
+					confrim_password: hashedConfirmPassword,
 					email: email,
 					submitTime: time,
 				});
@@ -47,7 +54,7 @@
                 <input id="email" name="email" required="required" type="text" placeholder="email@example.com">
             </p>
             <p>
-                <input type="button" value="signup" name="register_submit">
+                <input type="button" value="signup" id="register_submit">
             </p>
 		</form>
     </body>
