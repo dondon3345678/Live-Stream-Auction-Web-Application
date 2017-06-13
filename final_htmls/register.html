@@ -13,6 +13,65 @@
         <!-- <link rel="stylesheet" href="assets/css/main.css" /> -->
         <!-- <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript> -->
         </head>
+<style>
+p, input, label, .price {
+	font-size: 14pt;
+}
+body {
+	padding: 5%;
+	background-color:#222222;
+	color:white;
+}
+input, button {
+	color: black;
+}
+
+	#m{ 
+        border: 2px solid black; 
+        padding: 10px; 
+        width: 85%; 
+        /*margin: .5%; */
+        /*position: fixed; */
+        /*bottom: 0;*/
+        /*right:120px;*/
+
+      }
+      #send{ 
+        width: 15%; 
+        /*margin: .5%; */
+        /*background: rgb(121,2,2);*/
+        color:black; 
+        padding: 10px; 
+        /*position: fixed; */
+        /*bottom: 0;*/
+        /*right:5px;*/
+      }
+      #message_block{
+        width:100%;
+        /*position: absolute;*/
+        /*top:0;*/
+        /*bottom:5%;*/
+        /*margin-bottom:10px;*/
+        border: solid 2px black; 
+        overflow:auto;
+      }
+      #messages { 
+        list-style-type: none; 
+        margin: 10px; 
+        padding: 0; 
+        background-color: transparent;
+      }
+      #messages li { 
+      	text-align: left;
+        padding: 5px 10px; 
+        font-size:12pt;
+        color: white;
+      }
+      /*#messages li:nth-child(odd) { */
+        /*background: #eee; */
+      /*}*/
+
+</style>
 	<script>
 		var socket = io();
 			function reg(){
@@ -43,30 +102,56 @@
 	</script>
     <body>
 		<form>
-            <h1>Register</h1>
-            <p>
-                <label for="username">Username</label>
+     	<div class="title row" align="center" style="height: 160px;">
+       <h1>Register</h1>
+	</div>
+	<div align="center">
+            <p style="height: 40px;">
+		<div class="col-md-6 col-xs-6" align="right">
+		 <label for="username">Username</label>
+		</div>
+		<div class="col-md-6 col-xs-6" align="left">
                 <input id="username" name="username" required="required" type="text" placeholder="username">
+		</div>
             </p>
-            <p>
+            <p style="height: 40px;">
+		<div class="col-md-6 col-xs-6" align="right">
                 <label for="pasword">Password</label>
+		</div>
+		<div class="col-md-6 col-xs-6" align="left">
                 <input id="password" name="password" required="required" type="password" placeholder="password">
+		</div>
             </p>
-            <p>
+            <p style="height: 40px;">
+		<div class="col-md-6 col-xs-6" align="right">
                 <label for="confirm_pasword">Confrim Password</label>
+		</div>
+		<div class="col-md-6 col-xs-6" align="left">
                 <input id="confirm_password" name="confirm_password" required="required" type="password" placeholder="confrim password">
+		</div>
             </p>
-            <p>
+            <p style="height: 40px;">
+		<div class="col-md-6 col-xs-6" align="right">
                 <label for="email">Email</label>
+		</div>
+		<div class="col-md-6 col-xs-6" align="left">
                 <input id="email" name="email" required="required" type="text" placeholder="email@example.com">
+		</div>
             </p>
-            <p>
-                <input type="radio" name="type" value="Bidder" checked> Bidder <br>
-                <input type="radio" name="type" value="Seller"> Seller <br>
+            <p style="height: 40px;">
+		<div class="col-md-6 col-xs-6" align="right">
+		<label for="email">I am a</label>
+		</div>
+		<div class="col-md-6 col-xs-6" align="left">
+                <input type="radio" name="type" value="Bidder" checked> <label>Bidder</label>
+                <input type="radio" name="type" value="Seller"> <label>Seller</label> <br>
+		</div>
             </p>
+            <p style="height: 40px;"><p>
             <p>
-                <input type="button" value="signup" name="register_submit" onclick="reg()">
+                <input type="button" value="Sign up" name="register_submit" onclick="reg()">
             </p>
 		</form>
+	</div>
     </body>
 </html>
