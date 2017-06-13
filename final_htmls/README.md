@@ -55,6 +55,7 @@ db.query("your query string", callbackfn);
 ### mysql 
 ```mysql
 CREATE DATABASE member;
+USE member;
 CREATE TABLE users(
    pid INT NOT NULL AUTO_INCREMENT,
    name VARCHAR(100) NOT NULL,
