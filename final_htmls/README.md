@@ -21,20 +21,19 @@ node server.js
 
 - [x] Youtube stream video
 - [x] setting/bidding interface
-- [x] chat room
+- [ ] chat room(seller message have some bug,sender is 'undefined')
 - [x] start and end auction (end時最高金額reset為0，server的處理還沒有加上)
-- [x] 每次出價都會跳出確認視窗，顯示出價價格，送出後會有幾種response --> 改成每次一有新的拍賣開始就創建一個prodcut的object，並push到productList裡面，之後就更新資料
+- [x] 每次出價都會跳出確認視窗，顯示出價價格，送出後會有幾種response --> 改成每次一有新的拍賣開始就創建一個prodcut的object，之後就更新資料
 
   - 價錢小於目前最高價 FAIL
   - 此商品已經結標 FAIL
   - 自己已經是目前的最高價出標者 FAIL
-  - SUCCESS
   - 比別人晚出價 FAIL
+  - SUCCESS
   
 - [x] youtube video auto-play
-- [x] seller 更新之後 bidder 才進來，該怎麼更新？
---> 傳給他現有的資料更新
-- [x] userList 傳送與更新（剩下排版跟處理傳入的東西）
+- [x] When Bidder comes earlier than Seller, Server will give it some default settings.
+- [ ] userList 傳送與更新（剩下排版跟處理傳入的東西）
 
 ## Requirement
 ```

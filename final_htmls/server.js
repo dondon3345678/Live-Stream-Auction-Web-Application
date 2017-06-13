@@ -80,7 +80,7 @@ io.on('connection', function(socket){
 		socket.username = msg;
         console.log(socket.username);
         //send some info to this new bidder
-		socket.emit('first time add', {
+		socket.emit('bidder update', {
 			streamID: streamID,
         	itemName: product.name,
         	currentOwner: product.owner,
@@ -94,9 +94,9 @@ io.on('connection', function(socket){
 			userList: userList
 		});
 	});
-    socket.on('seller start', function(data){
+    socket.on('seller update', function(data){
         //This is for Seller to update product info
-    	console.log('seller start');
+    	console.log('seller update');
     	// console.log(data.streamID);
     	console.log(data.startAuction);
         // restart new bid
@@ -111,7 +111,7 @@ io.on('connection', function(socket){
     	    //productList[currentIndex].name = data.itemName;
     	    //productList[currentIndex].streamID = data.streamID;
 
-        io.emit('seller start',{
+        io.emit('bidder update',{
         		streamID: streamID,
         		itemName: product.name,
         		startAuction: startAuction,
