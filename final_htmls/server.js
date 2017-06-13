@@ -151,59 +151,61 @@ io.on('connection', function(socket){
             console.log('Bid Fail');
         }
 	});
-    /*
-	socket.on('register', function(req){
-	    var username = req.body.username;
-	    var password = req.body.passowrd;
-	    var confirm_password = req.body.password;
-	    var eamil = req.body.email;
-		var time = req.body.submitTime;
+	socket.on('register', function(data){
+        console.log(data);
+	    var username = data.username;
+	    var password = data.password;
+	    var confirm_password = data.confirm_password;
+	    var email = data.email;
+		var type = data.type;
 
 		var result = {};
+        console.log("PWd "+ password);
+        console.log("con" + confirm_password);
 	    if(password != confirm_password){
 	    	console.log("Password doesn't match");
 	    	result['message'] = "password doesn't match"
 			result['status_code'] = 400;
-			socket.broadcast.to(socket.id).emit(result);
+			socket.emit("register",result);
 			return;
 	    }
+        let hash = crypto.createHash('md5');
 	    hash.update(password);
-	    var hashedPassword = hash.digest('base64');
+	    var hashedPassword = hash.digest('hex');
 
-	    db.query("select 1 from user where name = ? order by name limit 1", [username], function(error, results, fields){
+	    db.query("select * from users where name = ?", [username], function(error, row){
 	    	if(error){
 	    		console.log(error);
 				result['message'] = "Internal Server Error";
 				result['status_code'] = 500;
-				socket.broadcast.to(socket.id).emit(result);
+				socket.emit("register",result);
 				return;
 	    	}
-	    	if(results.length > 0){
+	    	if(row.length > 0){
 	    		console.log("useranem", username, "already exits");
 				result['message'] = "username already exists";
 				result['status_code'] = 400;
-				socket.broadcast.to(socket.id).emit(result);
+				socket.emit("register",result);
 				return;
 	    	};
 	    });
 	    // write to DB
-		db.query("insert into user (name, password, email, timesatmp) values ?", [username, hashedPassword, email, timestamp], function(error, result){
+		db.query("insert into users (pid, name, email,password, type) values (?,?,?,?,?)", [0,username, email, hashedPassword,type], function(error, res){
 			if(error){
 				console.log(error);
 				result['message'] = "Internal Server Error";
 				result['status_code'] = 500;
-				socket.broadcast.to(socket.id).emit(result);
+                socket.emit("register",result);
 				return;
 			}
 		});
 		// success
-		result['message'] = "success";
+		result['message'] = "Success";
 		result['username'] = username;
 		result['status_code'] = 200;
-		socket.broadcast.to(socket.id).emit(result);
+		socket.emit("register",result);
 		return;
 	});
-    */
 	socket.on('disconnect',function(){			// listen for socket closed
 		var index = userList.indexOf(socket.username);
 		userList.splice(index, index);

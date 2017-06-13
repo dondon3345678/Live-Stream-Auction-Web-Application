@@ -78,7 +78,6 @@ input {
 	var socket = io();
 	var username = getCookie('name'); 
 	var status = false;
-    alert(username);
     socket.emit('add new user',username);
 	window.onload = (event) => {
 		document.querySelector("#submit").onclick = (event) => {
@@ -108,7 +107,7 @@ input {
 			chat.css('height', height);
 		});
 	}
-    socket.on('add user', function(data){
+    socket.on('add new user', function(data){
         appendMessage(data.username+"已加入");
         // reload userlist
     });
@@ -120,7 +119,7 @@ input {
         document.querySelector("#bidder").innerHTML = data.username;
     });
     socket.on('list update', function(data){
-        var text = data.userlist;
+        var text = data.userList;
         var userListText = text.join("<br>");
         document.querySelector("#userlist").innerHTML = userListText;
         document.getElementById("userlist").style.color = "white";

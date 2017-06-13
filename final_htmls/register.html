@@ -1,30 +1,44 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-    </head>
+        <title>拍賣網站</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <!-- <link rel="stylesheet" href="assets/css/main.css" /> -->
+        <!-- <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript> -->
+        </head>
 	<script>
 		var socket = io();
-		window.onload = (event) => {
-			document.querySelector("register_submit").onclick = (event) => {
-				event.preventDefault();
+			function reg(){
 				let username = document.querySelector("#username").value;
 				let password = document.querySelector("#password").value;
 				let confirm_password = document.querySelector("#confirm_password").value;
 				let email = document.querySelector("#email").value;
-				var d = new Date();
-				var time = d.getTime();
-				socket.emit("register", {
+                let type = document.getElementsByName("type");
+                let typeName = "";
+                if(type[0].checked){
+                    typeName = "regular";
+                }else if(type[1].checked){
+                    typeName = "seller";   
+                }
+                socket.emit("register", {
 					username: username,
 					password: password,
-					confrim_password: confirm_password,
+					confirm_password: confirm_password,
 					email: email,
-					submitTime: time,
+                    type: typeName
 				});
 			}
-		}
 		socket.on("register", function(data){
 			// show message
 			alert(data['message']);
+            document.location.href="/";
 		});
 	</script>
     <body>
@@ -47,7 +61,11 @@
                 <input id="email" name="email" required="required" type="text" placeholder="email@example.com">
             </p>
             <p>
-                <input type="button" value="signup" name="register_submit">
+                <input type="radio" name="type" value="Bidder" checked> Bidder <br>
+                <input type="radio" name="type" value="Seller"> Seller <br>
+            </p>
+            <p>
+                <input type="button" value="signup" name="register_submit" onclick="reg()">
             </p>
 		</form>
     </body>
