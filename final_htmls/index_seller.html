@@ -92,7 +92,7 @@ input {
 	        } else {
 	        	status = false;
 	        }
-	        socket.broadcast.emit('first update info', {
+	        socket.emit('seller update', {
 	        		itemName: itemName,
 	        		streamID: streamID,
 	        		startAuction: status

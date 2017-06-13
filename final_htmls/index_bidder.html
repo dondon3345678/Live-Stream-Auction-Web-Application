@@ -75,6 +75,7 @@ input, button {
 	var socket = io();
 	var username = prompt("請輸入暱稱","guest");		// need to change
 	var currentPrice = 0;
+    var streamID = "";
 
 	socket.emit('add new user', username);
 	
@@ -82,10 +83,11 @@ input, button {
 		appendMessage(data.username+"已加入");
 	});
 
-	socket.on('first time add',function(data){
-	    document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID+"?autoplay=1";
+	socket.on('bidder update',function(data){
+	    if(data.streamID != streamID){
+            document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID+"?autoplay=1";
+        }
 		document.querySelector("#itemName").innerHTML = data.itemName;
-		// document.querySelector("#itemDep").innerHTML = data.itemDep;
 
 		if (data.startAuction=="false") {
 			document.querySelector("#status").innerHTML = "停止拍賣";
