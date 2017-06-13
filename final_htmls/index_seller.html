@@ -99,24 +99,6 @@ input {
 	        		startAuction: status
 	        });
 		}
-        socket.on('add user', function(data){
-            appendMessage(data.username+"已加入");
-            // reload userlist
-        });
-        socket.on('chat message', function(data){
-            appendMessage(data.username+": "+data.msg);
-        });
-        socket.on('new bid', function(data){
-            document.querySelector("#money").innerHTML = data.price;
-            document.querySelector("#bidder").innerHTML = data.username;
-        });
-        socket.on('list update', function(data){
-            var text = data.userlist;
-            var userListText = text.join("<br>");
-            document.querySelector("#userlist").innerHTML = userListText;
-			document.getElementById("userlist").style.color = "white";
-        });
-
 		$(function() {
 			var video = $('#video');
 			var height = video.width() * 45 / 80;
@@ -126,7 +108,7 @@ input {
 			chat.css('height', height);
 		});
 	}
-    socket.on('add new user', function(data){
+    socket.on('add user', function(data){
         appendMessage(data.username+"已加入");
         // reload userlist
     });
@@ -138,8 +120,12 @@ input {
         document.querySelector("#bidder").innerHTML = data.username;
     });
     socket.on('list update', function(data){
-        document.querySelector("#userlist").innerHTML = data.userList;
+        var text = data.userlist;
+        var userListText = text.join("<br>");
+        document.querySelector("#userlist").innerHTML = userListText;
+        document.getElementById("userlist").style.color = "white";
     });
+
 	function sendMsg(){
 		var text = $('#m').val();
 		socket.emit('chat message', text);
