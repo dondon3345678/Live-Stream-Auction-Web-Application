@@ -14,6 +14,23 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
         <link rel="stylesheet" href="assets/css/main.css" />
         <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 </head>
+<style>
+span,p, input, label, .price {
+	font-size: 14pt;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+body {
+	padding: 5%;
+	background-color:#222222;
+	color:white;
+}
+span {
+	font-weight: bold;
+}
+input, button {
+	color: black;
+}
+</style>
 <body>
 
         <!-- Wrapper -->
@@ -25,21 +42,31 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
                                 <span class="icon fa-diamond"></span>
                         </div>
                         <div class="content" align="center">
-                                <div class="inner">
+                                <div class="inner" style="height: 160px;">
                                         <h1>歡迎登入拍賣網</h1>
                                 </div>
                         </div>
                 </header>
                 <div align="center">
                         <form action="" method="post">
-                                user: <input type="text" name="username"><br>
-                                pass: <input type="password" name="password"><br><br>
-                                <input type="submit" value="login">
+			<div style="height: 50px;">
+                                <span>Username<span>
+				<input type="text" name="username"><br>
+			</div>
+			<div style="height: 50px;">
+                                <span>Password</span>
+				<input type="password" name="password"><br>
+			</div>
+			<div style="height: 50px;">
+                                <input type="submit" value="Login">
+				<span>or</span>
+				<input type="button" value="Sign up" onclick="self.location.href='/register.html'"/>
+			</div>
                         </form>
                 </div>
-                <div align="center">
-                    <input type="button" value="Sign Up" onclick="self.location.href='/register.html'"/>
-                </div>
+                <!-- <div align="center" style="height: 50px;">
+                    <span>Or new users</span> <input type="button" value="Sign up" onclick="self.location.href='/register.html'"/>
+                </div> -->
 
                 <!-- Footer -->
                 <footer id="footer">
@@ -57,4 +84,3 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
 
 </body>
 </html>
-
