@@ -36,7 +36,7 @@ node server.js
 --> 傳給他現有的資料更新
 - [x] userList 傳送與更新（剩下排版跟處理傳入的東西）
 
-## requirement
+## Requirement
 ```
 npm install ursa
 ```
@@ -44,3 +44,24 @@ npm install ursa
 
 - [ ] register
 - [ ] 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
+
+## Tutorial
+
+### db.js
+
+```javascript
+const db = require("./db.js");
+db.query("your query string", callbackfn);
+```
+### mysql 
+```mysql
+CREATE DATABASE member;
+CREATE TABLE users(
+   pid INT NOT NULL AUTO_INCREMENT,
+   name VARCHAR(100) NOT NULL,
+   email VARCHAR(40) NOT NULL,
+   password VARCHAR(40) NOT NULL,
+   type VARCHAR(20) NOT NULL,
+   PRIMARY KEY ( pid)
+);
+

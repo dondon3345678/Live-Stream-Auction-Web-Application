@@ -59,11 +59,14 @@ Free for personal and commercial use under the CCA 3.0 license (html5up.net/lice
                         </div>
                 </header>
                 <div align="center">
-                        <form action="">
-                                user: <input type="text" id="username"><br>
-                                pass: <input type="password" id="password"><br><br>
-                                <input type="submit" value="login" id="submit">
+                        <form action="" method="post">
+                                user: <input type="text" name="username"><br>
+                                pass: <input type="password" name="password"><br><br>
+                                <input type="submit" value="login">
                         </form>
+                </div>
+                <div align="center">
+                    <input type="button" value="Sign Up" onclick="self.location.href='/register.html'"/>
                 </div>
 
                 <!-- Footer -->
