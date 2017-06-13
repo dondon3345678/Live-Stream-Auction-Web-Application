@@ -63,6 +63,7 @@ var sess;
     });
     app.get('/index_seller.html', function(req, res){
       res.sendFile(__dirname + '/index_seller.html');
+      console.log("Name: "+req.cookies.name);
     });
     app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
