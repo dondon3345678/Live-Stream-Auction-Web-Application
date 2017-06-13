@@ -3,14 +3,16 @@ var http= require('http').Server(app);
 var io = require('socket.io')(http);
 var db = require('./db');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
 //var digtial_sig = require('./digital_sig');
-//var crypto = require('crypto');
+var crypto = require('crypto');
 
 var test = 'test'
 app.use(session({secret: 'test'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 var sess;
 
@@ -27,18 +29,24 @@ var sess;
       }
     });
     app.post('/login.html', function(req,res){
+      //Login
       console.log(req.body.username);
       console.log(req.body.password);
       sess = req.session;
-      db.query('select * from users where name = ? and password = ?',[req.body.username,req.body.password],function(err,rows){
+      let hash = crypto.createHash('md5');
+      let pwdhash = hash.update(req.body.password).digest('hex');
+      db.query('select * from users where name = ? and password = ?',[req.body.username,pwdhash],function(err,rows){
         if(err){
             console.log(err);
+            res.redirect('/');
         }else if(rows.length==0){
             console.log("wrong");
+            res.redirect('/');
         }else{
             console.log(req.body.username+" log in");
             sess.user = req.body.username;
             sess.type = rows[0].type;
+            res.cookie('name', req.body.username);
             if(rows[0].type == 'regular'){
                 res.redirect('/index_bidder.html');
             }else{
@@ -58,6 +66,7 @@ var sess;
     });
     app.get('/index_bidder.html', function(req, res){
       res.sendFile(__dirname + '/index_bidder.html');
+      console.log("Name: "+req.cookies.name);
     });
     app.get('/register.html', function(req, res){
     res.sendFile(__dirname + '/register.html');
@@ -143,7 +152,6 @@ io.on('connection', function(socket){
 	});
     /*
 	socket.on('register', function(req){
-	    var hash = crypto.createHash('sha256');
 	    var username = req.body.username;
 	    var password = req.body.passowrd;
 	    var confirm_password = req.body.password;

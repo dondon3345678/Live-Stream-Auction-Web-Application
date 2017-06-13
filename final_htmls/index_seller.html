@@ -76,7 +76,7 @@ input {
 </style>
 <script>
 	var socket = io();
-	var username = prompt("請輸入暱稱","guest");		// need to change
+	var username = getCookie('name'); 
 	var status = false;
 
 	window.onload = (event) => {
@@ -133,6 +133,21 @@ input {
 		var message = document.getElementById("message_block");
 		message.scrollTop = message.scrollHeight;
 	}
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
 </script>
 <body style="">
 	<div class="title row" align="center" style="height: 80px;"><h1>SELLER</h1></div>
