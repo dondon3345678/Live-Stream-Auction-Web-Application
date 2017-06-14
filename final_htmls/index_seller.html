@@ -98,6 +98,15 @@ input {
 	        		startAuction: status
 	        });
 		}
+        document.querySelector("#endAuction").onclick = (event)=>{
+            event.preventDefault();
+            alert("Auction End!");
+            socket.emit('auction end',"end");
+            //Auto False
+            document.getElementById("startAuction").checked = false;
+
+         
+        }
 		$(function() {
 			var video = $('#video');
 			var height = video.width() * 45 / 80;
@@ -183,7 +192,10 @@ input {
 						開始拍賣&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" id="startAuction" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger"  style="width: 100px;">
 					</div>
-					<input type="button" id="submit" value="ENTER">
+                    <div>
+                        <input type="button" id="endAuction" value="End Auction">
+					    <input type="button" id="submit" value="ENTER">
+                    </div>
 				</div>
 			</div>
 		</div>

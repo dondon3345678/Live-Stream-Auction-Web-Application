@@ -87,11 +87,11 @@ input, button {
             document.querySelector("#video").src = "https://www.youtube.com/embed/" + data.streamID+"?autoplay=1";
         }
 		document.querySelector("#itemName").innerHTML = data.itemName;
-
+        alert(data.startAuction);
 		if (data.startAuction=="false") {
 			document.querySelector("#status").innerHTML = "停止拍賣";
 			document.getElementById("status").style.color = "red";
-			document.querySelector("#bid").disabled = true;
+			//document.querySelector("#bid").disabled = true;
 		} else {
 			document.querySelector("#status").innerHTML = "拍賣中";
 			document.getElementById("status").style.color = "green";
@@ -103,6 +103,14 @@ input, button {
 	socket.on('chat message', function(data){
 		appendMessage(data.username+": "+data.msg);
 	});
+    socket.on('auction end', function(data){
+        alert("Auction for current item "+ data.productName + " is end. Bidder is "+ data.productOwner+" with price "+ data.productPrice);
+		document.querySelector("#itemName").innerHTML = "Wait for next item...";
+		document.querySelector("#money").innerHTML = "0";
+		document.querySelector("#bidder").innerHTML = "?";
+        document.querySelector("#status").innerHTML = "停止拍賣";
+        document.getElementById("status").style.color = "red";
+    });
 	socket.on('new bid', function(data){
 		document.querySelector("#money").innerHTML = data.price;
 		document.querySelector("#bidder").innerHTML = data.username;

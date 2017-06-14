@@ -77,7 +77,7 @@ var currentPlayer = '';
 var currentIndex = 0;
 var product = {name: "", owner: "?", price: 0, time: ""};
 var streamID = "";
-var startAuction = "True";
+var startAuction = "false";
 var productList = [];
 var userList = [];
 
@@ -128,6 +128,23 @@ io.on('connection', function(socket){
         		currentPrice: product.price,
         		currentOwner: product.owner
         });	
+    });
+    socket.on('auction end', function(msg){
+        io.emit('auction end',{
+            productName: product.name,
+            productPrice: product.price,
+            productOwner: product.owner
+        });
+        console.log("Seller end current auction.");
+		db.query("insert into products (pid, name, owner,price) values (?,?,?,?)", [0,product.name, product.owner, product.price], function(error, res){
+            if(error){
+                console.log("Product register error");
+            }else{
+                console.log("Product register OK");
+            }
+        
+        });
+    
     });
     socket.on('chat message', function(msg){
 		console.log("chat: "+msg);
