@@ -82,6 +82,16 @@ th, td {
     padding-right: 8px;
     text-align: left;
 }
+button, input[type=button] {
+	/*font-size: 13pt !important;*/
+	background-color: transparent;
+	border: 1px white solid;
+	color: white !important;
+}
+button:hover, input[type=button]:hover {
+	color: grey !important;
+	border-color: grey;
+}
 </style>
 <script>
 	var socket = io();
@@ -193,7 +203,7 @@ th, td {
 						商品名稱&nbsp;&nbsp;&nbsp;
 						<input type="text" id="itemName" name="itemName" style="width: 100px;">
 					</div>
-					<input type="button" id="updateProduct" value="Update Product">
+					<input type="button" id="updateProduct" style="font-size: 12pt;" value="更新資訊">
 					<div class="row" style="height: 50px;">
 						直播 ID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<input type="text" id="streamID" name="streamURL" style="width: 150px;">
@@ -210,9 +220,9 @@ th, td {
 						開始拍賣&nbsp;&nbsp;&nbsp;
 						<input type="checkbox" id="startAuction" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger" style="width: 100px;">
 					</div>
-                    <div>
-                        <input type="button" id="endAuction" value="End Auction">
-					    <input type="button" id="submit" value="ENTER">
+					<div align="center">
+                        <input type="button" id="endAuction" value="結束拍賣">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					    <input type="button" id="submit" value="確認修改">
                     </div>
 				</div>
 			</div>
@@ -226,7 +236,7 @@ th, td {
     			<ul id="messages"></ul>
     		</div>
     		<div class="row">
-    		<input id="m" autocomplete="off" /><button id="send" onclick="sendMsg();">Send</button>
+    		<input id="m" autocomplete="off" /><button id="send" style="font-size: 13pt;" onclick="sendMsg();">Send
     		</div>
 		</div>
 	</div>

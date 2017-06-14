@@ -142,7 +142,7 @@ io.on('connection', function(socket){
         });
         productListText = productListText+"<tr><td>"+product.name+"</td><td>"+ product.price+"</td><td>"+ product.owner+"</td></tr>";
         io.emit('product list update', {
-            list: productListText;
+            list: productListText
         });
     
     });
