@@ -69,7 +69,16 @@ input, button {
       /*#messages li:nth-child(odd) { */
         /*background: #eee; */
       /*}*/
-
+button, input[type=button] {
+	/*font-size: 13pt !important;*/
+	background-color: transparent;
+	border: 1px white solid;
+	color: white !important;
+}
+button:hover, input[type=button]:hover {
+	color: #DDDDDD !important;
+	border-color: #DDDDDD;
+}
 </style>
 <script>
 	var socket = io();
@@ -166,7 +175,6 @@ input, button {
 <body>
 	<div class="title row" align="center" style="height: 160px;">
 		<h1>BIDDER</h1>
-		<h2 id="itemName">當前商品</h2>
 	</div>
 	<div class="row" align="center">
 		<div class="col-md-8 col-xs-12">
@@ -175,6 +183,7 @@ input, button {
 			<div class="row" style="height: 30px;"></div>
 			<div class="row" style="height: 100px;">
 				<div class="price col-md-offset-2 col-xs-offset-2 col-md-10 col-xs-10" align="left">
+					<h2 id="itemName">當前商品</h2>
 					<div class="row" style="height: 50px;">
 						最高出價&nbsp;&nbsp;&nbsp;
 						<span id="money">0</span>元 by <span id="bidder"></span>
@@ -186,6 +195,8 @@ input, button {
 						<button onclick="newBid();">go</button>
 						<span id="status"></span>
 					</div>
+					<iframe src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=small&mobile_iframe=true&width=52&height=20&appId" width="70" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+					<br><a href="http://line.naver.jp/R/msg/text/?LINE%E3%81%A7%E9%80%81%E3%82%8B%0D%0Ahttp%3A%2F%2Fline.naver.jp%2F"><img src="line.png" width="84" height="20" alt="用LINE傳送" /></a>
 				</div>
 			</div>
 		</div>
