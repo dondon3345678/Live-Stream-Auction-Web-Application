@@ -133,6 +133,11 @@ input {
         document.querySelector("#userlist").innerHTML = userListText;
         document.getElementById("userlist").style.color = "white";
     });
+    socket.on('product list update', function(data){
+    	var text = data.list;
+    	text = '<table>'+text+'</table>';
+    	document.querySelector('#productlist').innerHTML = text;
+    });
 
 	function sendMsg(){
 		var text = $('#m').val();

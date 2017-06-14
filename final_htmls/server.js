@@ -78,7 +78,7 @@ var currentIndex = 0;
 var product = {name: "", owner: "?", price: 0, time: ""};
 var streamID = "";
 var startAuction = "false";
-var productList = [];
+var productListText = '';
 var userList = [];
 
 io.on('connection', function(socket){
@@ -116,10 +116,6 @@ io.on('connection', function(socket){
         product.owner="?";
         product.price=0;
         product.time=Date.now();
-    		//productList.push(product);
-    		//currentIndex = productList.length-1;
-    	    //productList[currentIndex].name = data.itemName;
-    	    //productList[currentIndex].streamID = data.streamID;
 
         io.emit('bidder update',{
         		streamID: streamID,
@@ -143,6 +139,10 @@ io.on('connection', function(socket){
                 console.log("Product register OK");
             }
         
+        });
+        productListText = productListText+"<tr><td>"+product.name+"</td><td>"+ product.price+"</td><td>"+ product.owner+"</td></tr>";
+        io.emit('product list update', {
+            list: productListText;
         });
     
     });
