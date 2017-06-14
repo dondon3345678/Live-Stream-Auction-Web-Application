@@ -102,10 +102,7 @@ input {
             event.preventDefault();
             alert("Auction End!");
             socket.emit('auction end',"end");
-            //Auto False
-            document.getElementById("startAuction").checked = false;
-
-         
+            $('#startAuction').bootstrapToggle('off');
         }
 		$(function() {
 			var video = $('#video');
