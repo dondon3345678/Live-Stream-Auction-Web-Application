@@ -104,6 +104,13 @@ input {
             socket.emit('auction end',"end");
             $('#startAuction').bootstrapToggle('off');
         }
+        $("#startAuction").change(function(){
+        	if($(this).prop("checked") == true){
+        		socket.emit('auction status', "on");
+		    }else{
+        		socket.emit('auction status', "off");
+		    }
+		});
 		$(function() {
 			var video = $('#video');
 			var height = video.width() * 45 / 80;
@@ -192,7 +199,7 @@ input {
 					</div> -->
 					<div class="row" style="height: 50px;">
 						開始拍賣&nbsp;&nbsp;&nbsp;
-						<input type="checkbox" id="startAuction" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger"  style="width: 100px;">
+						<input type="checkbox" id="startAuction" checked data-toggle="toggle" data-on="Ready" data-off="Not Ready" data-onstyle="success" data-offstyle="danger" style="width: 100px;">
 					</div>
                     <div>
                         <input type="button" id="endAuction" value="End Auction">

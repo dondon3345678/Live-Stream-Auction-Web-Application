@@ -111,6 +111,15 @@ input, button {
         document.querySelector("#status").innerHTML = "停止拍賣";
         document.getElementById("status").style.color = "red";
     });
+    socket.on('auction status',function(data){
+    	if (data=='on') {
+    		document.querySelector("#status").innerHTML = "拍賣中";
+			document.getElementById("status").style.color = "green";
+    	} else {
+           	document.querySelector("#status").innerHTML = "停止拍賣";
+			document.getElementById("status").style.color = "red";
+    	}
+    });
 	socket.on('new bid', function(data){
 		document.querySelector("#money").innerHTML = data.price;
 		document.querySelector("#bidder").innerHTML = data.username;

@@ -146,6 +146,15 @@ io.on('connection', function(socket){
         });
     
     });
+    socket.on('auction status', function(msg){
+        if (msg=="on") {
+            startAuction = 'true';
+            io.emit('auction status','on');
+        } else {
+            startAuction = 'false';
+            io.emit('auction status','off');
+        }
+    });
     socket.on('chat message', function(msg){
 		console.log("chat: "+msg);
 		io.emit('chat message', {
