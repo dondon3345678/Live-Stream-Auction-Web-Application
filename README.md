@@ -1,4 +1,6 @@
-# This is Final Project of CNL team 10 , 2017.
+# Live Stream Auction
+## Description
+This Web Application allows the user to create private auction room and invite bidders to compete for products. Currently need YouTube Live account.
 
 ## Execution
 
@@ -28,11 +30,6 @@ node server.js
 ```
 npm install ursa
 ```
-## Need test
-
-- [ ] register
-- [ ] 出價的錢要禁止輸入字串or負數（type已經用number，可另外加上js的驗證）
-
 ## Tutorial
 
 ### db.js
